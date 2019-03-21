@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding"
+            android:layout_marginEnd="@dimen/indent"
+            android:layout_marginStart="@dimen/padding"
+            android:layout_marginBottom="@dimen/padding"
+            android:layout_alignParentStart="true"
+            app:cardCornerRadius="@dimen/padding">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:padding="@dimen/mini_padding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorExternalMessage">
+            <TextView
+                    android:id="@+id/text_external_author"
+                    android:textStyle="italic"
+                    android:textSize="@dimen/text16"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/mini_padding"
+                    android:paddingEnd="@dimen/mini_padding"/>
+            <TextView
+                    android:id="@+id/text_external_recipient"
+                    android:textStyle="italic"
+                    android:textSize="@dimen/text16"
+                    android:textColor="@color/colorRecipient"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/mini_padding"
+                    android:paddingEnd="@dimen/mini_padding"/>
+            <TextView
+                    android:id="@+id/text_external_message"
+                    android:textSize="@dimen/text16"
+                    android:textColor="@color/colorText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/mini_padding"
+                    android:paddingEnd="@dimen/mini_padding"/>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="end">
+
+                <TextView
+                        android:id="@+id/text_external_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/mini_padding"
+                        android:layout_marginBottom="@dimen/mini_padding"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

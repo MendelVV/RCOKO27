@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#d40201</color>
+    <color name="colorPrimaryDark">#AF0100</color>
+    <color name="colorAccent">#0093dd</color>
+    <color name="colorAccentLight">#01A2F3</color>
+    <color name="colorExternalMessage">#9CD8F7</color>
+    <color name="colorRecipient">#303F9F</color>
+
+
+    <color name="colorText">#1D1D1D</color>
+    <color name="colorTextAlt">#ffffff</color>
+    <color name="colorTextSecond">#464646</color>
+    <color name="colorGray">#808080</color>
+    <color name="colorItemPress">#CACACA</color>
+</resources>

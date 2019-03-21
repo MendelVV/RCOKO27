@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">RCOKO27</string>
+    <string name="e_mail">Введите e-mail</string>
+    <string name="your_name">Ваше имя</string>
+    <string name="registration">Регистрация</string>
+    <string name="rcoko">РЦОКО</string>
+    <string name="input_code_from_email">Код полученный на e-mail</string>
+    <string name="need_specify_data">Нужно указать e-mail и имя</string>
+    <string name="need_specify_auth_data">Нужно указать e-mail и пароль</string>
+    <string name="contains_email">Такой e-mail уже зарегистрирован</string>
+    <string name="unknow_error">Что-то пошло не так</string>
+    <string name="invalid_code_range">Неверная длина кода</string>
+
+    <string name="url_reg">http://192.168.43.14/rcoko27/api/registration.php</string>
+    <string name="url_reg_code">http://192.168.43.14/rcoko27/api/registration.php</string>
+    <string name="url_reg_role">http://192.168.43.14/rcoko27/api/registration.php</string>
+    <string name="url_auth">http://192.168.43.14/rcoko27/api/registration.php</string>
+    <string name="url_get_data">http://192.168.43.14/rcoko27/api/get_data.php</string>
+    <string name="url_send_message">http://192.168.43.14/rcoko27/api/send_message.php</string>
+    <string name="error_code">Неверный код</string>
+    <string name="next">Далее</string>
+    <string name="input_password">Введите пароль</string>
+    <string name="confirm_password">Подтвердите пароль</string>
+    <string name="code_sended_to_email">Код отправлен на указанный электронный адрес</string>
+    <string name="select_role">Выберите роль</string>
+    <string name="student">Ученик</string>
+    <string name="parent">Родитель</string>
+    <string name="worker">Работник образования</string>
+    <string name="short_pass">Пароль должен содержать не менее 8 символов</string>
+    <string name="passwords_not_match">Пароли не совпадают</string>
+    <string name="all_ok">Все хорошо</string>
+    <string name="not_connection">Проблемы с подключением</string>
+    <string name="sign_in">Вход</string>
+    <string name="auth">Авторизация</string>
+    <string name="no_auth">Неверное имя пользователя или пароль</string>
+    <string name="again">Заново</string>
+    <string name="events">События</string>
+    <string name="load">Загрузка…</string>
+    <string name="messages">Сообщения</string>
+    <string name="voting">Голосования</string>
+    <string name="vote">Голосовать</string>
+    <string name="not_avaible">Пока не доступно</string>
+    <string name="to">to: %s</string>
+    <string name="error_get_data">Обшибка при получении данных</string>
+
+</resources>

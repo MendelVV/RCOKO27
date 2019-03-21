@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_above="@id/bottom_layout">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/padding"
+            android:paddingTop="@dimen/padding"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/white"
+            android:elevation="@dimen/mini_padding">
+        <EditText
+                android:id="@+id/message_text"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:maxLines="3"
+                android:inputType="textCapSentences|textMultiLine"
+                android:textSize="@dimen/text16"
+                android:textColor="@color/colorText"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin"/>
+        <ImageButton
+                android:id="@+id/send_button"
+                android:layout_width="@dimen/send_img_size"
+                android:layout_height="@dimen/send_img_size"
+                android:background="@drawable/background_send"
+                android:layout_marginEnd="@dimen/margin"
+                android:layout_marginStart="@dimen/margin"
+                android:src="@drawable/ic_send"
+                android:elevation="@dimen/mini_padding"
+        android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+</RelativeLayout>
