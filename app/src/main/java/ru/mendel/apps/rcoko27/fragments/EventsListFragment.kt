@@ -359,7 +359,6 @@ class EventsListFragment : BaseEventFragment() {
 
             if (visibleItemCount + firstVisibleItemPosition >= totalItemCount && firstVisibleItemPosition >= 0) {
                 getData(mList.size)
-                //Log.d("MyTag","update!")
             }
 
         }
