@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.event_voting_fragment.view.*
 import kotlinx.android.synthetic.main.voting_item.view.*
 import ru.mendel.apps.rcoko27.QueryPreference
 import ru.mendel.apps.rcoko27.R
+import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.api.RcokoClient
 import ru.mendel.apps.rcoko27.api.requests.VoteRequest
 import ru.mendel.apps.rcoko27.api.responses.BaseResponse
@@ -26,7 +27,6 @@ class EventVotingFragment : BaseEventFragment(){
 
     companion object {
         const val CODE = "code"
-        const val ACTION_VOTE = "vote"
 
         fun newInstance(code: Int) : EventVotingFragment{
             val fragment = EventVotingFragment()
@@ -42,7 +42,6 @@ class EventVotingFragment : BaseEventFragment(){
     private var mVoting : MutableList<VotingData> = mutableListOf()
     private var mEventCode = -1
     private lateinit var mAdapter : VotingAdapter
-
 
     private fun actionVote(message: BaseResponse){
         val response = message as VoteResponse
@@ -67,7 +66,7 @@ class EventVotingFragment : BaseEventFragment(){
 
     override fun subscribe() {
         val observerVote = ResponseObserver{x->actionVote(x)}
-        ReactiveSubject.addSubscribe(observerVote, ACTION_VOTE)
+        ReactiveSubject.addSubscribe(observerVote, APIHelper.ACTION_VOTE)
         mObservers.add(observerVote)
     }
 
@@ -135,19 +134,13 @@ class EventVotingFragment : BaseEventFragment(){
         }
 
         private fun vote(){
-
             val current = itemView.voting_recycler.current
-            Log.d("MyTag","current=$current code=${mVotingData.code}")
 
-            val request = VoteRequest()
-            request.appname = activity!!.packageName
-            request.action = ACTION_VOTE
-            request.password = mPassword
-            request.email = mLogin
-            request.voting = mVotingData.code
-            request.answer = mVotingData.possibles[current].code
-
-            RcokoClient.vote(request)
+            APIHelper.vote(appname = activity!!.packageName,
+                email = mLogin!!,
+                password = mPassword!!,
+                voting = mVotingData.code,
+                answer = mVotingData.possibles[current].code)
         }
     }
 

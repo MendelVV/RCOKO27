@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.reg_fragment.view.*
 import org.json.JSONObject
 import ru.mendel.apps.rcoko27.*
+import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.api.RcokoClient
 import ru.mendel.apps.rcoko27.api.requests.RegRequest
 import ru.mendel.apps.rcoko27.async.BasicAsync
@@ -76,22 +77,9 @@ class RegFragment: AbstractAuthFragment(){
     private fun check(){
         if (view!!.text_email.text.toString()!="" && view!!.text_name.text.toString()!=""){
             //отправляем данные на сервер
-            val request = RegRequest()
-            request.appname = activity!!.packageName
-            request.action = "reg"
-            request.email = view!!.text_email.text.toString()
-            request.name = view!!.text_name.text.toString()
-            RcokoClient.reg(request)
-
-/*            val jsonObject = JSONObject()
-            jsonObject.put(JsonSchema.Registration.APPNAME, activity!!.packageName)
-            jsonObject.put(JsonSchema.Registration.ACTION, "reg")
-            jsonObject.put(JsonSchema.Registration.EMAIL, view!!.text_email.text.toString())
-            jsonObject.put(JsonSchema.Registration.NAME, view!!.text_name.text.toString())
-
-            mTask = RegAsync(getString(R.string.url_reg))
-            mTask!!.execute(jsonObject)*/
-
+            APIHelper.sendReg(appname = activity!!.packageName,
+                email = view!!.text_email.text.toString(),
+                name = view!!.text_name.text.toString())
         }else{
             //выводи сообщение что чего-то нехватает
             showMessage(R.string.need_specify_data)
@@ -121,28 +109,4 @@ class RegFragment: AbstractAuthFragment(){
 
     }
 
-    inner class RegAsync(url_str:String) : BasicAsync(url_str){
-
-        override fun onPostExecute(result: JSONObject?) {
-            super.onPostExecute(result)
-            if (result==null) return
-            val res = result.getString(JsonSchema.Response.RESULT)
-            if (res=="error"){
-                //такой пользователь уже есть
-                val action = ActionData(ActionData.ACTION_ERROR)
-                action.data[ActionData.ITEM_TYPE] = result.getString(JsonSchema.Response.TYPE)
-                ReactiveSubject.next(action)
-            }else if (res=="ok"){
-                //если все хорошо то переходим к регистрации
-                val action = ActionData(ActionData.ACTION_TO_NEXT)
-                ReactiveSubject.next(action)
-            }else{
-                //что-то пошло не так
-                val action = ActionData(ActionData.ACTION_ERROR)
-                action.data[ActionData.ITEM_TYPE] = "unknown"
-                ReactiveSubject.next(action)
-            }
-
-        }
-    }
 }

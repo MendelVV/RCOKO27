@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.auth_fragment.view.*
 import org.json.JSONObject
 import ru.mendel.apps.rcoko27.*
 import ru.mendel.apps.rcoko27.activities.MainActivity
+import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.api.RcokoClient
 import ru.mendel.apps.rcoko27.api.requests.AutoLoginRequest
 import ru.mendel.apps.rcoko27.async.BasicAsync
@@ -61,22 +62,9 @@ class AuthFragment : AbstractAuthFragment() {
         if (view!!.text_email.text.toString()=="" || view!!.text_password.text.toString()==""){
             showMessage(R.string.need_specify_auth_data)
         }else{
-
-            val request = AutoLoginRequest()
-            request.appname = activity!!.packageName
-            request.action = "auth"
-            request.email = view!!.text_email.text.toString()
-            request.password = view!!.text_password.text.toString()
-            RcokoClient.autoLogin(request)
-
-/*            val jsonObject = JSONObject()
-            jsonObject.put(JsonSchema.Registration.APPNAME, activity!!.packageName)
-            jsonObject.put(JsonSchema.Registration.ACTION, "auth")
-            jsonObject.put(JsonSchema.Registration.EMAIL, view!!.text_email.text.toString())
-            jsonObject.put(JsonSchema.Registration.PASSWORD, view!!.text_password.text.toString())
-
-            mTask = AuthAsync(getString(R.string.url_auth))
-            mTask.execute(jsonObject)*/
+            APIHelper.sendAutoLogin(appname = activity!!.packageName,
+                email = view!!.text_email.text.toString(),
+                password = view!!.text_password.text.toString())
         }
     }
 
@@ -90,25 +78,4 @@ class AuthFragment : AbstractAuthFragment() {
         activity!!.overridePendingTransition(R.anim.in_alpha,R.anim.out_alpha)
     }
 
-    inner class AuthAsync(url_str:String) : BasicAsync(url_str){
-
-        override fun onPostExecute(result: JSONObject?) {
-            super.onPostExecute(result)
-            if (result==null) return
-            val res = result.getString(JsonSchema.Response.RESULT)
-            if (res=="ok"){
-                //все хорошо идем дальше
-                val action = ActionData(ActionData.ACTION_TO_MAIN)
-                ReactiveSubject.next(action)
-            }else if (res=="error"){
-                val action = ActionData(ActionData.ACTION_ERROR)
-                action.data[ActionData.ITEM_TYPE] = result.getString(JsonSchema.Response.TYPE)
-                ReactiveSubject.next(action)
-            }else{
-                val action = ActionData(ActionData.ACTION_ERROR)
-                action.data[ActionData.ITEM_TYPE] = result.getString("unknow")
-                ReactiveSubject.next(action)
-            }
-        }
-    }
 }

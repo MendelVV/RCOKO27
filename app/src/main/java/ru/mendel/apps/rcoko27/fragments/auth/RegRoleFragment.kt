@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.reg_role_fragment.view.*
 import org.json.JSONObject
 import ru.mendel.apps.rcoko27.*
 import ru.mendel.apps.rcoko27.activities.MainActivity
+import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.api.RcokoClient
 import ru.mendel.apps.rcoko27.api.requests.RegistrationRequest
 import ru.mendel.apps.rcoko27.async.BasicAsync
@@ -123,28 +124,12 @@ class RegRoleFragment : AbstractAuthFragment() {
             else -> -1
         }
 
-        val request = RegistrationRequest()
-        request.appname = activity!!.packageName
-        request.action = "registration"
-        request.email = mEmail
-        request.name = mName
-        request.code = mCode
-        request.password = mPassword
-        request.role = role
-
-        RcokoClient.registration(request)
-
-/*        val jsonObject = JSONObject()
-        jsonObject.put(JsonSchema.Registration.APPNAME, activity!!.packageName)
-        jsonObject.put(JsonSchema.Registration.ACTION, "registration")
-        jsonObject.put(JsonSchema.Registration.EMAIL, mEmail)
-        jsonObject.put(JsonSchema.Registration.NAME, mName)
-        jsonObject.put(JsonSchema.Registration.CODE, mCode)
-        jsonObject.put(JsonSchema.Registration.PASSWORD, mPassword)
-        jsonObject.put(JsonSchema.Registration.ROLE, role)
-
-        mTask = RegRoleAsync(getString(R.string.url_reg_code))
-        mTask.execute(jsonObject)*/
+        APIHelper.sendRegistration(appname = activity!!.packageName,
+            email = mEmail,
+            name = mName,
+            code = mCode,
+            password = mPassword,
+            role = role)
     }
 
     private fun toMain(){
@@ -157,25 +142,4 @@ class RegRoleFragment : AbstractAuthFragment() {
         activity!!.overridePendingTransition(R.anim.in_alpha,R.anim.out_alpha)
     }
 
-    inner class RegRoleAsync(url_str:String) : BasicAsync(url_str){
-
-        override fun onPostExecute(result: JSONObject?) {
-            super.onPostExecute(result)
-            if (result==null) return
-            val res = result.getString(JsonSchema.Response.RESULT)
-            if (res=="ok"){
-                //все хорошо идем дальше
-                val action = ActionData(ActionData.ACTION_TO_MAIN)
-                ReactiveSubject.next(action)
-            }else if (res=="error"){
-                val action = ActionData(ActionData.ACTION_ERROR)
-                action.data[ActionData.ITEM_TYPE] = result.getString(JsonSchema.Response.TYPE)
-                ReactiveSubject.next(action)
-            }else{
-                val action = ActionData(ActionData.ACTION_ERROR)
-                action.data[ActionData.ITEM_TYPE] = result.getString("unknow")
-                ReactiveSubject.next(action)
-            }
-        }
-    }
 }

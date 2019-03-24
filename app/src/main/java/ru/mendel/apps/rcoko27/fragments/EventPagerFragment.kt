@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.event_pager_fragment.view.*
 import ru.mendel.apps.rcoko27.*
+import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.api.RcokoClient
 import ru.mendel.apps.rcoko27.api.requests.GetEventRequest
 import ru.mendel.apps.rcoko27.api.responses.BaseResponse
@@ -23,7 +24,6 @@ class EventPagerFragment : BaseEventFragment() {
 
     companion object {
 
-        const val ACTION_GET_EVENT = "get_event"
         const val CODE = "code"
 
         fun newInstance(code: Int):EventPagerFragment{
@@ -44,22 +44,20 @@ class EventPagerFragment : BaseEventFragment() {
 
 
     private fun getEvent(message: BaseResponse) {
-        if (message.action== ACTION_GET_EVENT){
-            val response = message as GetEventResponse
-            mEvent = response.event
-            RcokoDatabase(activity!!)
-            RcokoDatabase.setEvent(mEvent!!)
-            RcokoDatabase.clearVoting(mEventCode)
-            for (votingData in response.voting){
-//                Log.d("MyTag","possibles = "+votingData.possibles.size)
-                RcokoDatabase.insertVoting(votingData)
-            }
-            RcokoDatabase.clearMessages(mEventCode)
-            for (messageData in response.messages){
-                RcokoDatabase.insertMessage(messageData)
-            }
-            mUiHandler.post { updatePages() }
+        val response = message as GetEventResponse
+        mEvent = response.event
+        RcokoDatabase(activity!!)
+        RcokoDatabase.setEvent(mEvent!!)
+        RcokoDatabase.clearVoting(mEventCode)
+        for (votingData in response.voting){
+            RcokoDatabase.insertVoting(votingData)
         }
+        RcokoDatabase.clearMessages(mEventCode)
+        for (messageData in response.messages){
+            RcokoDatabase.insertMessage(messageData)
+        }
+        mUiHandler.post { updatePages() }
+
     }
 
     private fun updatePages(){
@@ -81,7 +79,7 @@ class EventPagerFragment : BaseEventFragment() {
 
     override fun subscribe() {
         val observerGetEvent = ResponseObserver{ x->getEvent(x)}
-        ReactiveSubject.addSubscribe(observerGetEvent, ACTION_GET_EVENT)
+        ReactiveSubject.addSubscribe(observerGetEvent, APIHelper.ACTION_GET_EVENT)
         mObservers.add(observerGetEvent)
     }
 
@@ -101,7 +99,6 @@ class EventPagerFragment : BaseEventFragment() {
         view.sliding_tabs.setupWithViewPager(view.view_pager)
         //начинаем загружать данные
 
-
         view.refresh_layout.setOnRefreshListener { refresh() }
 
         return view
@@ -117,15 +114,10 @@ class EventPagerFragment : BaseEventFragment() {
     }
 
     private fun loadEvent(){
-
-        val request = GetEventRequest()
-        request.appname = activity!!.packageName
-        request.action = ACTION_GET_EVENT
-        request.email = mLogin
-        request.password = mPassword
-        request.code = mEventCode
-
-        RcokoClient.getEvent(request)
+        APIHelper.getEvent(appname = activity!!.packageName,
+            email = mLogin!!,
+            password = mPassword!!,
+            code = mEventCode)
     }
 
     inner class PagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm){

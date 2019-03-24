@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.event_on_message_item.view.*
 import kotlinx.android.synthetic.main.message_external_item.view.*
 import kotlinx.android.synthetic.main.message_item.view.*
 import ru.mendel.apps.rcoko27.*
+import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.api.RcokoClient
 import ru.mendel.apps.rcoko27.api.requests.SendMessageRequest
 import ru.mendel.apps.rcoko27.api.requests.UpdateMessagesRequest
@@ -32,8 +33,6 @@ import kotlin.collections.ArrayList
 class EventMessagesFragment : BaseEventFragment() {
 
     companion object {
-        const val ACTION_SEND_MESSAGE = "send_message"
-        const val ACTION_UPDATE_MESSAGES = "update_messages"
         const val CODE = "code"
 
         fun newInstance(code: Int):EventMessagesFragment{
@@ -135,11 +134,11 @@ class EventMessagesFragment : BaseEventFragment() {
 
     override fun subscribe() {
         val observerSendMessage = ResponseObserver{x->actionSendMessage(x)}
-        ReactiveSubject.addSubscribe(observerSendMessage, ACTION_SEND_MESSAGE)
+        ReactiveSubject.addSubscribe(observerSendMessage, APIHelper.ACTION_SEND_MESSAGE)
         mObservers.add(observerSendMessage)
 
         val observerUpdateMessage = ResponseObserver{x->actionUpdateMessage(x)}
-        ReactiveSubject.addSubscribe(observerUpdateMessage, ACTION_UPDATE_MESSAGES)
+        ReactiveSubject.addSubscribe(observerUpdateMessage, APIHelper.ACTION_UPDATE_MESSAGES)
         mObservers.add(observerUpdateMessage)
 
     }
@@ -171,19 +170,11 @@ class EventMessagesFragment : BaseEventFragment() {
     }
 
     private fun updateMessages(){
-        //собираем запрос на обновление сообщений
-
-        //
         try{
-            val request = UpdateMessagesRequest()
-
-            request.appname = activity!!.packageName
-            request.action = ACTION_UPDATE_MESSAGES
-            request.password = mPassword
-            request.email = mLogin
-            request.event = mEvent!!.code
-
-            RcokoClient.updateMessages(request)
+            APIHelper.updateMessages(appname = activity!!.packageName,
+                email = mLogin!!,
+                password = mPassword!!,
+                event = mEvent!!.code)
 
             val msg = Message()
             msg.arg1=0
@@ -213,18 +204,13 @@ class EventMessagesFragment : BaseEventFragment() {
             RcokoDatabase(activity!!)
             RcokoDatabase.insertMessage(messageData)
 
-            val request = SendMessageRequest()
-            request.appname = activity!!.packageName
-            request.action = ACTION_SEND_MESSAGE
-            request.password = mPassword
-
-            request.author = messageData.author
-            request.recipient = messageData.recipient
-            request.text = messageData.text
-            request.event = messageData.event
-            request.uuid = messageData.uuid
-
-            RcokoClient.sendMessage(request)
+            APIHelper.sendMessage(appname = activity!!.packageName,
+                password = mPassword!!,
+                author = messageData.author!!,
+                recipient = messageData.recipient!!,
+                text = messageData.text!!,
+                event = messageData.event,
+                uuid = messageData.uuid!!)
 
             view!!.message_text.setText("")
         }

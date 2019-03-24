@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.event_item.view.*
 import kotlinx.android.synthetic.main.events_list_fragment.view.*
 import ru.mendel.apps.rcoko27.*
 import ru.mendel.apps.rcoko27.activities.EventActivity
+import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.api.RcokoClient
 import ru.mendel.apps.rcoko27.api.requests.GetDataRequest
 import ru.mendel.apps.rcoko27.api.requests.UpdateEventsRequest
@@ -29,10 +30,6 @@ import ru.mendel.apps.rcoko27.reactive.ResponseObserver
 class EventsListFragment : BaseEventFragment() {
 
     companion object {
-        const val ACTION_GET_EVENTS = "get_events"
-        const val ACTION_REFRESH_EVENTS = "refresh_events"
-        const val ACTION_UPDATE_EVENTS = "update_events"
-
         const val SIZE = 5
     }
 
@@ -51,7 +48,7 @@ class EventsListFragment : BaseEventFragment() {
     }
 
     private fun getEvents(message: BaseResponse){
-        Log.d("MyTag", "action=$ACTION_GET_EVENTS")
+        Log.d("MyTag", "action=${APIHelper.ACTION_GET_EVENTS}")
         val response = message as GetDataResponse
         val start = mList.size
         mIsStartLoad = false
@@ -78,7 +75,7 @@ class EventsListFragment : BaseEventFragment() {
     }
 
     private fun refreshEvents(message: BaseResponse){
-        Log.d("MyTag", "action=$ACTION_REFRESH_EVENTS")
+        Log.d("MyTag", "action=${APIHelper.ACTION_REFRESH_EVENTS}")
         val response = message as GetDataResponse
         mList.clear()
         for (event in response.data) {
@@ -97,7 +94,7 @@ class EventsListFragment : BaseEventFragment() {
     }
 
     private fun updateEvents(message: BaseResponse){
-        Log.d("MyTag", "action=$ACTION_UPDATE_EVENTS")
+        Log.d("MyTag", "action=${APIHelper.ACTION_UPDATE_EVENTS}")
         val response = message as UpdateEventsResponse
         var last = 0
         for (event in response.events){
@@ -146,15 +143,15 @@ class EventsListFragment : BaseEventFragment() {
 
     override fun subscribe(){
         val observerGetEvent = ResponseObserver{x->getEvents(x)}
-        ReactiveSubject.addSubscribe(observerGetEvent, ACTION_GET_EVENTS)
+        ReactiveSubject.addSubscribe(observerGetEvent, APIHelper.ACTION_GET_EVENTS)
         mObservers.add(observerGetEvent)
 
         val observerRefreshEvents = ResponseObserver{x->refreshEvents(x)}
-        ReactiveSubject.addSubscribe(observerRefreshEvents, ACTION_REFRESH_EVENTS)
+        ReactiveSubject.addSubscribe(observerRefreshEvents, APIHelper.ACTION_REFRESH_EVENTS)
         mObservers.add(observerRefreshEvents)
 
         val observerUpdateEvents = ResponseObserver{x->updateEvents(x)}
-        ReactiveSubject.addSubscribe(observerUpdateEvents, ACTION_UPDATE_EVENTS)
+        ReactiveSubject.addSubscribe(observerUpdateEvents, APIHelper.ACTION_UPDATE_EVENTS)
         mObservers.add(observerUpdateEvents)
 
     }
@@ -196,72 +193,34 @@ class EventsListFragment : BaseEventFragment() {
 
     private fun updateEvents(){
         if (mList.size<=0) return
-        val request = UpdateEventsRequest()
-        request.appname = activity!!.packageName
-        request.action = ACTION_UPDATE_EVENTS
-        request.email = mLogin
-        request.password = mPassword
-        request.start = mList.first().dateevent//дата первого события
-        request.end = mList.last().dateevent//дата последнего события
 
-        RcokoClient.updateEvents(request)
+        APIHelper.updateEvents(appname = activity!!.packageName,
+            email = mLogin!!,
+            password = mPassword!!,
+            start = mList.first().dateevent!!,
+            end = mList.last().dateevent!!)
     }
 
     private fun refresh(){
         //собираем сообщение для обновления данных
         mIsStartLoad = true
 
-        val request = GetDataRequest()
-        request.appname = activity!!.packageName
-        request.action = ACTION_REFRESH_EVENTS
-        request.email = mLogin
-        request.password = mPassword
-        request.start = 0
-        request.size = SIZE
-
-        RcokoClient.getData(request)
-
-/*        val jsonObject = JSONObject()
-        jsonObject.put(JsonSchema.GetData.APPNAME, activity!!.packageName)
-        jsonObject.put(JsonSchema.GetData.ACTION, ACTION_REFRESH_EVENTS)
-        jsonObject.put(JsonSchema.GetData.EMAIL, mLogin)
-        jsonObject.put(JsonSchema.GetData.PASSWORD, mPassword)
-        jsonObject.put(JsonSchema.GetData.START, 0)
-        jsonObject.put(JsonSchema.GetData.SIZE, SIZE)
-
-        val message = Message()
-        message.obj = jsonObject
-        mHandler.sendMessage(message)*/
+        APIHelper.refreshEvents(appname = activity!!.packageName,
+            email = mLogin!!,
+            password = mPassword!!,
+            start = 0,
+            size = SIZE)
     }
 
     private fun getData(start: Int){
-        Log.d("MyTag","getData start=$start")
         if (mIsStartLoad)return
-        Log.d("MyTag","getData start=$start continue")
         mIsStartLoad = true
 
-        val request = GetDataRequest()
-        request.appname = activity!!.packageName
-        request.action = ACTION_GET_EVENTS
-        request.email = mLogin
-        request.password = mPassword
-        request.start = start
-        request.size = SIZE
-
-        RcokoClient.getData(request)
-
-
-/*        val jsonObject = JSONObject()
-        jsonObject.put(JsonSchema.GetData.APPNAME, activity!!.packageName)
-        jsonObject.put(JsonSchema.GetData.ACTION, ACTION_GET_EVENTS)
-        jsonObject.put(JsonSchema.GetData.EMAIL, mLogin)
-        jsonObject.put(JsonSchema.GetData.PASSWORD, mPassword)
-        jsonObject.put(JsonSchema.GetData.START, start)
-        jsonObject.put(JsonSchema.GetData.SIZE, SIZE)
-
-        val message = Message()
-        message.obj = jsonObject
-        mHandler.sendMessage(message)*/
+        APIHelper.getEvents(appname = activity!!.packageName,
+            email = mLogin!!,
+            password = mPassword!!,
+            start = start,
+            size = SIZE)
 
     }
 

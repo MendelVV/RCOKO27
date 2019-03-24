@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.reg_code_fragment.view.*
 import org.json.JSONObject
 import ru.mendel.apps.rcoko27.*
+import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.api.RcokoClient
 import ru.mendel.apps.rcoko27.api.requests.RegCodeRequest
 import ru.mendel.apps.rcoko27.async.BasicAsync
@@ -107,50 +108,13 @@ class RegCodeFragment: AbstractAuthFragment(){
         if (code.length==4){
             //отправляем данные на сервер
 
-            val request = RegCodeRequest()
-            request.appname = activity!!.packageName
-            request.action = "verify_code"
-            request.email = mEmail
-            request.code = code
-
-            RcokoClient.regCode(request)
-
-/*            val jsonObject = JSONObject()
-            jsonObject.put(JsonSchema.Registration.APPNAME, activity!!.packageName)
-            jsonObject.put(JsonSchema.Registration.ACTION, "verify_code")
-            jsonObject.put(JsonSchema.Registration.EMAIL, mEmail)
-            jsonObject.put(JsonSchema.Registration.CODE, code)
-
-            mTask = RegCodeAsync(getString(R.string.url_reg_code))
-            mTask.execute(jsonObject)*/
-
+            APIHelper.sendRegCode(appname = activity!!.packageName,
+                email = mEmail,
+                code = code)
         }else{
             //выводи сообщение что чего-то нехватает
             showMessage(R.string.invalid_code_range)
         }
-    }
-
-    inner class RegCodeAsync(url_str:String) : BasicAsync(url_str){
-
-        override fun onPostExecute(result: JSONObject?) {
-            super.onPostExecute(result)
-            if (result==null) return
-            val res = result.getString(JsonSchema.Response.RESULT)
-            if (res=="ok"){
-                //все хорошо идем дальше
-                val action = ActionData(ActionData.ACTION_TO_NEXT)
-                ReactiveSubject.next(action)
-            }else if (res=="error"){
-                val action = ActionData(ActionData.ACTION_ERROR)
-                action.data[ActionData.ITEM_TYPE] = result.getString(JsonSchema.Response.TYPE)
-                ReactiveSubject.next(action)
-            }else{
-                val action = ActionData(ActionData.ACTION_ERROR)
-                action.data[ActionData.ITEM_TYPE] = "unknow"
-                ReactiveSubject.next(action)
-            }
-        }
-
     }
 
 }
