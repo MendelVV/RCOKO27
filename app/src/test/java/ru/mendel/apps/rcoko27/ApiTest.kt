@@ -6,12 +6,22 @@ import org.junit.Before
 import org.junit.Test
 import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.api.RcokoClient
-import ru.mendel.apps.rcoko27.api.requests.AutoLoginRequest
+import ru.mendel.apps.rcoko27.api.requests.GetDataRequest
+import ru.mendel.apps.rcoko27.api.responses.GetDataResponse
+import ru.mendel.apps.rcoko27.api.responses.GetEventResponse
+
 import ru.mendel.apps.rcoko27.data.ActionData
 import ru.mendel.apps.rcoko27.reactive.ActionDataObserver
 import ru.mendel.apps.rcoko27.reactive.ReactiveSubject
+import ru.mendel.apps.rcoko27.reactive.ResponseObserver
 
 class ApiTest {
+
+    companion object {
+        const val APP_NAME = "ru.mendel.apps.rcoko27"
+        const val LOGIN = "mendel_ww@mail.ru"
+        const val PASSWORD = "77uter24"
+    }
 
     @Before
     fun initTest() {
@@ -35,13 +45,62 @@ class ApiTest {
             b=false
         }
         ReactiveSubject.addSubscribe(observer)
-        APIHelper.sendAutoLogin(appname = "ru.mendel.apps.rcoko27",
-            email = "mendel_ww@mail.ru",
-            password = "77uter24")
+        APIHelper.sendAutoLogin(appname = APP_NAME,
+            email = LOGIN,
+            password = PASSWORD)
         while (b){
             Thread.sleep(100)
             //тут просто ждем пока все не закончится
         }
+        observer.onComplete()
+    }
+
+    @Test(timeout = 7000)
+    fun getEvents(){
+        var b = true
+        val observer = ResponseObserver{x->
+            assert(x.result=="ok")
+            val response = x as GetDataResponse
+            assert(response.data.size==5)
+            b=false
+        }
+
+        ReactiveSubject.addSubscribe(observer)
+
+        APIHelper.getEvents(appname = APP_NAME,
+            email = LOGIN,
+            password = PASSWORD,
+            start = 0,
+            size = 5)
+
+        while (b){
+            Thread.sleep(100)
+            //тут просто ждем пока все не закончится
+        }
+        observer.onComplete()
+    }
+
+    @Test(timeout = 7000)
+    fun getEvent() {
+        var b = true
+        val observer = ResponseObserver{x->
+            assert(x.result=="ok")
+            val response = x as GetEventResponse
+            assert(response.event!!.code==1)
+            b=false
+        }
+        ReactiveSubject.addSubscribe(observer)
+
+        APIHelper.getEvent(appname = APP_NAME,
+            email = LOGIN,
+            password = PASSWORD,
+            code = 1)
+
+        while (b){
+            Thread.sleep(100)
+            //тут просто ждем пока все не закончится
+        }
+        observer.onComplete()
     }
 
 

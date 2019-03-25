@@ -120,26 +120,27 @@ object RcokoClient {
     }
 
     fun getData(request: GetDataRequest){
-
+        System.out.println(request.action+" "+request.appname)
         service.getData(request).enqueue(
             object : Callback<GetDataResponse> {
 
                 override fun onResponse(call: Call<GetDataResponse>, response: Response<GetDataResponse>) {
                     val res = response.body()!!
+                    System.out.println(res.result)
                     if (res.result=="ok"){
-                        Log.d("MyTag","ok "+res.data.size)
+//                        Log.d("MyTag","ok "+res.data.size)
                         ReactiveSubject.next(res)//отправили ответ
                     }else if (res.result=="error"){
-                        Log.d("MyTag","getData error")
+//                        Log.d("MyTag","getData error")
                         baseError(res)
                     }else{
-                        Log.d("MyTag","getData unknowError")
+//                        Log.d("MyTag","getData unknowError")
                         unknownError()
                     }
                 }
 
                 override fun onFailure(call: Call<GetDataResponse>, t: Throwable) {
-                    Log.i("MyTag","getData")
+//                    Log.i("MyTag","getData")
                     verifyError(t)
                 }
 
@@ -281,7 +282,7 @@ object RcokoClient {
         when (t){
             is ConnectException -> networkError()
             is SocketTimeoutException -> networkError()
-            else -> Log.e("MyTag","error",t)
+            //else -> Log.e("MyTag","error",t)
         }
     }
 
