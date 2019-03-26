@@ -17,7 +17,8 @@ object RcokoClient {
     //класс отправляющий запросы на сервер и получающий ответы
 
     private const val BASE_URL = "http://192.168.43.14/rcoko27/api/"
-//    private const val BASE_URL = "http://192.168.0.31/rcoko27/api/"
+//    private const val BASE_URL = "http://10.0.0.72/rcoko27/api/"
+
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
@@ -120,7 +121,6 @@ object RcokoClient {
     }
 
     fun getData(request: GetDataRequest){
-        System.out.println(request.action+" "+request.appname)
         service.getData(request).enqueue(
             object : Callback<GetDataResponse> {
 
@@ -263,7 +263,7 @@ object RcokoClient {
                 }
 
                 override fun onFailure(call: Call<UpdateMessagesResponse>, t: Throwable) {
-                    Log.i("MyTag","updateMessages")
+//                    Log.i("MyTag","updateMessages")
                     verifyError(t)
                 }
 
@@ -284,6 +284,7 @@ object RcokoClient {
             is SocketTimeoutException -> networkError()
             //else -> Log.e("MyTag","error",t)
         }
+        System.err.println(t)
     }
 
     private fun networkError(){

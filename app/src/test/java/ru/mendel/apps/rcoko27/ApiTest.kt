@@ -9,6 +9,7 @@ import ru.mendel.apps.rcoko27.api.RcokoClient
 import ru.mendel.apps.rcoko27.api.requests.GetDataRequest
 import ru.mendel.apps.rcoko27.api.responses.GetDataResponse
 import ru.mendel.apps.rcoko27.api.responses.GetEventResponse
+import ru.mendel.apps.rcoko27.api.responses.UpdateMessagesResponse
 
 import ru.mendel.apps.rcoko27.data.ActionData
 import ru.mendel.apps.rcoko27.reactive.ActionDataObserver
@@ -103,5 +104,27 @@ class ApiTest {
         observer.onComplete()
     }
 
+    @Test(timeout = 7000)
+    fun updateMessages() {
+        var b = true
+        val observer = ResponseObserver{x->
+            assert(x.result=="ok")
+            val response = x as UpdateMessagesResponse
+            assert(response.messages.size>0)
+            b=false
+        }
+        ReactiveSubject.addSubscribe(observer)
+
+        APIHelper.updateMessages(appname = APP_NAME,
+            email = LOGIN,
+            password = PASSWORD,
+            event = 1)
+
+        while (b){
+            Thread.sleep(100)
+            //тут просто ждем пока все не закончится
+        }
+        observer.onComplete()
+    }
 
 }
