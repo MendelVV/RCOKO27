@@ -9,10 +9,10 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/action_voitings"
+        android:id="@+id/action_activities"
         android:orderInCategory="1"
-        android:title="@string/voting"
-        android:icon="@drawable/ic_voting"
+        android:title="@string/my_activities"
+        android:icon="@drawable/ic_activities"
         app:showAsAction="always"/>
 
 

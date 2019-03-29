@@ -42,5 +42,7 @@
     <string name="not_avaible">Пока не доступно</string>
     <string name="to">to: %s</string>
     <string name="error_get_data">Обшибка при получении данных</string>
+    <string name="my_activities">Мои активности</string>
+    <string name="sorry">Извините. Вкладка пока недоступна.</string>
 
 </resources>

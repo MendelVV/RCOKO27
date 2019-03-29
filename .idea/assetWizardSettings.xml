@@ -55,9 +55,11 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_voted" />
+                                      <entry key="assetType" value="IMAGE" />
+                                      <entry key="imageAsset" value="E:\Ресурсы для приложений\RCOKO27\activities.png" />
+                                      <entry key="outputName" value="ic_activities" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="0093dd" />
+                                      <entry key="themeColor" value="ffffff" />
                                     </map>
                                   </option>
                                 </PersistentState>
