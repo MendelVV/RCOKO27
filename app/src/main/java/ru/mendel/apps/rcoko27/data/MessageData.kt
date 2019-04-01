@@ -4,6 +4,8 @@ import android.util.Log
 import org.json.JSONException
 import org.json.JSONObject
 import ru.mendel.apps.rcoko27.json.JsonSchema
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MessageData() {
 
@@ -11,6 +13,23 @@ class MessageData() {
         const val STATE_NONE = -1
         const val STATE_SEND = 0
         const val STATE_DELIVERED = 1
+
+        fun convertData(date: String, gmt:String):String{
+            //пришли данные в виде 2019-12-10 10:10:10, +02:00
+            val calendar = GregorianCalendar()
+            val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z")
+            calendar.time = format.parse("$date $gmt")
+//            System.out.println(calendar.toString())
+
+            val formatCurrent = SimpleDateFormat("HH:mm dd.MM.yyyy", Locale.getDefault())
+/*            val dateF = SimpleDateFormat("Z", Locale.getDefault())
+            val localTime = dateF.format(System.currentTimeMillis())
+            System.out.println("time = $localTime")
+            //нужно узнать местный часовой пояс и соответственно разницу во времени*/
+
+            return formatCurrent.format(calendar.time)
+        }
+
     }
 
     var code : Int = 0
@@ -23,6 +42,7 @@ class MessageData() {
     var text: String? = null
     var uuid: String? = null
     var state: Int = -1
+    var gmt: String? = null
 
     constructor(jsonObject: JSONObject):this(){
         try {

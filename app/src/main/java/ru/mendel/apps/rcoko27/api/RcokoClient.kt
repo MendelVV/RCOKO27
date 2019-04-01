@@ -154,6 +154,7 @@ object RcokoClient {
             object : Callback<GetEventResponse> {
 
                 override fun onResponse(call: Call<GetEventResponse>, response: Response<GetEventResponse>) {
+
                     val res = response.body()!!
                     if (res.result=="ok"){
                         ReactiveSubject.next(res)//отправили ответ
@@ -273,6 +274,7 @@ object RcokoClient {
 
     private fun baseError(response: BaseResponse){
 //        Log.d("MyTag","baseError type=${response.type}")
+        System.err.println("error type=${response.type}")
         val action = ActionData(ActionData.ACTION_ERROR)
         action.data[ActionData.ITEM_TYPE] = response.type!!
         ReactiveSubject.next(action)

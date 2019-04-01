@@ -196,6 +196,7 @@ class EventMessagesFragment : BaseEventFragment() {
             messageData.event = mEvent!!.code
             messageData.uuid = UUID.randomUUID().toString()
             messageData.state = MessageData.STATE_SEND
+            messageData.date = "none"
 
             mMessages.add(messageData)
             mAdapter!!.notifyItemInserted(mMessages.size)
@@ -225,7 +226,8 @@ class EventMessagesFragment : BaseEventFragment() {
 
             if (mMessageData!!.author==mLogin){
                 itemView.text_message.text = mMessageData!!.text
-                itemView.text_time.text = "time"
+                itemView.text_time.text = mMessageData!!.date
+
                 if (mMessageData!!.state==MessageData.STATE_SEND){
                     itemView.image_state.setImageResource(R.drawable.ic_send_message)
                 }else{
@@ -240,7 +242,7 @@ class EventMessagesFragment : BaseEventFragment() {
                     itemView.text_external_recipient.text = getString(R.string.to,mMessageData!!.recipientname)
                 }
                 itemView.text_external_message.text = mMessageData!!.text
-                itemView.text_external_time.text = "time"
+                itemView.text_external_time.text = mMessageData!!.date
             }
 
         }

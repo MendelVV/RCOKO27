@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.mendel.apps.rcoko27.R
+import ru.mendel.apps.rcoko27.data.MessageData
 import ru.mendel.apps.rcoko27.fragments.ActivitiesFragment
 import ru.mendel.apps.rcoko27.fragments.EventsListFragment
 
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         setBottomMenu()
         mCurrentFragment = EventsListFragment()

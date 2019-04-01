@@ -87,7 +87,8 @@ class ApiTest {
         val observer = ResponseObserver{x->
             assert(x.result=="ok")
             val response = x as GetEventResponse
-            assert(response.event!!.code==1)
+            assert(response.event!!.code==27)
+            System.out.println(response.messages)
             b=false
         }
         ReactiveSubject.addSubscribe(observer)
@@ -95,7 +96,7 @@ class ApiTest {
         APIHelper.getEvent(appname = APP_NAME,
             email = LOGIN,
             password = PASSWORD,
-            code = 1)
+            code = 27)
 
         while (b){
             Thread.sleep(100)
