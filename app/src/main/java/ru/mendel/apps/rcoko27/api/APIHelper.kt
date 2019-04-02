@@ -22,6 +22,8 @@ object APIHelper {
 
     const val ACTION_VOTE = "vote"
 
+    const val ACTION_GET_ACTIVITIES = "get_activities"
+
     fun sendAutoLogin(appname:String, email:String,password:String){
         val request = AutoLoginRequest()
         request.appname = appname
@@ -147,5 +149,15 @@ object APIHelper {
         request.answer = answer
 
         RcokoClient.vote(request)
+    }
+
+    fun getActivities(appname:String, email:String, password:String){
+        val request = ActivitiesRequest()
+        request.appname = appname
+        request.action = ACTION_GET_ACTIVITIES
+        request.password = password
+        request.email = email
+
+        RcokoClient.getActivities(request)
     }
 }

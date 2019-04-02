@@ -7,6 +7,7 @@ import org.junit.Test
 import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.api.RcokoClient
 import ru.mendel.apps.rcoko27.api.requests.GetDataRequest
+import ru.mendel.apps.rcoko27.api.responses.ActivitiesResponse
 import ru.mendel.apps.rcoko27.api.responses.GetDataResponse
 import ru.mendel.apps.rcoko27.api.responses.GetEventResponse
 import ru.mendel.apps.rcoko27.api.responses.UpdateMessagesResponse
@@ -120,6 +121,33 @@ class ApiTest {
             email = LOGIN,
             password = PASSWORD,
             event = 1)
+
+        while (b){
+            Thread.sleep(100)
+            //тут просто ждем пока все не закончится
+        }
+        observer.onComplete()
+    }
+
+
+    @Test(timeout = 7000)
+    fun getActivities() {
+        var b = true
+        val observer = ResponseObserver{x->
+            assert(x.result=="ok")
+            val response = x as ActivitiesResponse
+            for (data in response.activities){
+                System.out.println(data.toString())
+            }
+            System.out.println("events.size=${response.events.size} voting.size=${response.votings.size}")
+//            assert(response.messages.size>0)
+            b=false
+        }
+        ReactiveSubject.addSubscribe(observer)
+
+        APIHelper.getActivities(appname = APP_NAME,
+            email = LOGIN,
+            password = PASSWORD)
 
         while (b){
             Thread.sleep(100)

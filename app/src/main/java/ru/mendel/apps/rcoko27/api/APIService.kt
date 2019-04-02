@@ -38,4 +38,7 @@ interface APIService {
 
     @POST("get_data.php")
     fun updateMessages(@Body req: UpdateMessagesRequest): Call<UpdateMessagesResponse>
+
+    @POST("activities.php")
+    fun getActivities(@Body req: ActivitiesRequest) : Call<ActivitiesResponse>
 }

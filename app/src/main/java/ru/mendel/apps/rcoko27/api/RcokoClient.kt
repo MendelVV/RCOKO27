@@ -224,6 +224,31 @@ object RcokoClient {
         )
     }
 
+    fun getActivities(request: ActivitiesRequest){
+
+        service.getActivities(request).enqueue(
+            object : Callback<ActivitiesResponse> {
+
+                override fun onResponse(call: Call<ActivitiesResponse>, response: Response<ActivitiesResponse>) {
+                    val res = response.body()!!
+                    if (res.result=="ok"){
+                        ReactiveSubject.next(res)//отправили ответ
+                    }else if (res.result=="error"){
+                        baseError(res)
+                    }else{
+                        unknownError()
+                    }
+                }
+
+                override fun onFailure(call: Call<ActivitiesResponse>, t: Throwable) {
+                    System.err.println("on getActivities")
+                    verifyError(t)
+                }
+
+            }
+        )
+    }
+
     fun updateEvents(request: UpdateEventsRequest){
         service.updateEvents(request).enqueue(
             object : Callback<UpdateEventsResponse> {
