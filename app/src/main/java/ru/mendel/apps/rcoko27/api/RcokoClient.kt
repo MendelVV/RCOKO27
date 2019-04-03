@@ -298,7 +298,6 @@ object RcokoClient {
     }
 
     private fun baseError(response: BaseResponse){
-//        Log.d("MyTag","baseError type=${response.type}")
         System.err.println("error type=${response.type}")
         val action = ActionData(ActionData.ACTION_ERROR)
         action.data[ActionData.ITEM_TYPE] = response.type!!

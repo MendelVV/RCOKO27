@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.answer_item.view.*
@@ -52,6 +53,7 @@ class PossibleRecyclerView : RecyclerView {
         mPossibles = null
         mAnswers = answers
         mAdapter.notifyDataSetChanged()
+
     }
 
     private fun totalAnswers():Int{
@@ -61,6 +63,14 @@ class PossibleRecyclerView : RecyclerView {
             sum+=answer.size
         }
         return sum
+    }
+
+
+    override fun onInterceptTouchEvent(e: MotionEvent?): Boolean {
+        if (e!!.action==MotionEvent.ACTION_DOWN){
+            callOnClick()
+        }
+        return true
     }
 
     inner class PossibleHolder(itemView: View) : ViewHolder(itemView){

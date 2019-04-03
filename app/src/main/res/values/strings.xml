@@ -44,5 +44,6 @@
     <string name="error_get_data">Обшибка при получении данных</string>
     <string name="my_activities">Мои активности</string>
     <string name="sorry">Извините. Вкладка пока недоступна.</string>
+    <string name="message_info">Вы учавствовали в обсуждении этой новости (отправили %d сообщений)</string>
 
 </resources>

@@ -88,7 +88,7 @@ class ApiTest {
         val observer = ResponseObserver{x->
             assert(x.result=="ok")
             val response = x as GetEventResponse
-            assert(response.event!!.code==27)
+            assert(response.event!!.code==28)
             System.out.println(response.messages)
             b=false
         }
@@ -97,7 +97,8 @@ class ApiTest {
         APIHelper.getEvent(appname = APP_NAME,
             email = LOGIN,
             password = PASSWORD,
-            code = 27)
+            code = 28)
+
 
         while (b){
             Thread.sleep(100)

@@ -7,6 +7,7 @@ import ru.mendel.apps.rcoko27.data.VotingData
 
 class ActivitiesResponse : BaseResponse() {
 
+    var gmt:String?=null
     var activities: MutableList<ActivitiesData> = mutableListOf()
     var events: MutableList<EventData> = mutableListOf()
     var votings: MutableList<VotingData> = mutableListOf()
