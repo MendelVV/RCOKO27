@@ -89,7 +89,7 @@ class ApiTest {
             assert(x.result=="ok")
             val response = x as GetEventResponse
             assert(response.event!!.code==28)
-            System.out.println(response.messages)
+            System.out.println(response.event!!.icon)
             b=false
         }
         ReactiveSubject.addSubscribe(observer)

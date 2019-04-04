@@ -3,6 +3,7 @@ package ru.mendel.apps.rcoko27.data
 import android.util.Log
 import org.json.JSONException
 import org.json.JSONObject
+import ru.mendel.apps.rcoko27.api.RcokoClient
 
 class EventData() {
 
@@ -49,5 +50,11 @@ class EventData() {
 
     }
 
+    fun getImageUrl(): String?{
+        if (icon!="false"){
+            return RcokoClient.IMAGE_URL+"event_"+ code + icon
+        }
+        return null
+    }
 
 }

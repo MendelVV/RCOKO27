@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.event_item.view.*
 import kotlinx.android.synthetic.main.events_list_fragment.view.*
 import ru.mendel.apps.rcoko27.*
@@ -233,6 +234,7 @@ class EventsListFragment : BaseEventFragment() {
         private val mDate = itemView.event_news_date
         private val mEventMessages = itemView.event_messages
         private val mEventVoting = itemView.event_voitings
+        private val mEventImage = itemView.event_image
 
         init {
             itemView.setOnClickListener {
@@ -252,6 +254,22 @@ class EventsListFragment : BaseEventFragment() {
             mDate.text = EventData.convertDate(event.datenews!!)
             mEventVoting.text = event.votingcount.toString()
             mEventMessages.text = event.messagescount.toString()
+
+            val nm = event.getImageUrl()
+            if (nm!=null){
+                Picasso.get()
+                    .load(nm)
+                    .resize(300,300)
+                    .centerCrop()
+                    .error(R.drawable.rcoko27)
+                    .into(mEventImage)
+            }else{
+                Picasso.get()
+                    .load(R.drawable.rcoko27)
+                    .resize(300,300)
+                    .centerCrop()
+                    .into(mEventImage)
+            }
         }
     }
 

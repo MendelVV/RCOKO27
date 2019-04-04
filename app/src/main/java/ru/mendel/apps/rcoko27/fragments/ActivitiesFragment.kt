@@ -130,7 +130,7 @@ class ActivitiesFragment : BaseEventFragment() {
             mActivitiesData = activitiesData
             mCurrentData = event
             itemView.message_event.text = event.title
-            itemView.message_info.text = getString(R.string.message_info,mActivitiesData!!.number)
+            itemView.message_info.text = getString(R.string.message_info,resources.getQuantityString(R.plurals.pl_messages,mActivitiesData!!.number,mActivitiesData!!.number))
             itemView.message_date.text = MessageData.convertData(mActivitiesData!!.date!!,mGmt!!)
             itemView.message_event_type.text = event.type+" ("+EventData.convertDate(event.dateevent!!)+")"
         }

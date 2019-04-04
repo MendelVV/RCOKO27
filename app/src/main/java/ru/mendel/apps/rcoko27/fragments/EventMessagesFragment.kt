@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.event_messages_fragment.view.*
 import kotlinx.android.synthetic.main.event_on_message_item.view.*
 import kotlinx.android.synthetic.main.message_external_item.view.*
@@ -252,6 +253,16 @@ class EventMessagesFragment : BaseEventFragment() {
             itemView.event_title.text = event.title
             itemView.event_text.text = event.text
             itemView.event_news_date.text = EventData.convertDate(event.datenews!!)
+
+            val nm = event.getImageUrl()
+            if (nm!=null){
+                Picasso.get()
+                    .load(nm)
+                    .resize(300,300)
+                    .centerCrop()
+                    .error(R.drawable.rcoko27)
+                    .into(itemView.event_image)
+            }
         }
 
     }

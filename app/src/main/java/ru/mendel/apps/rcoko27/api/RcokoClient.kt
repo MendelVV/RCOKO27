@@ -15,7 +15,7 @@ import java.net.SocketTimeoutException
 
 object RcokoClient {
     //класс отправляющий запросы на сервер и получающий ответы
-
+    const val IMAGE_URL = "http://192.168.43.14/rcoko27/resources/"
     private const val BASE_URL = "http://192.168.43.14/rcoko27/api/"
 //    private const val BASE_URL = "http://10.0.0.72/rcoko27/api/"
 
