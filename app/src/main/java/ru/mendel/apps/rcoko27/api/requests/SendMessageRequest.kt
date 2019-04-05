@@ -4,7 +4,7 @@ class SendMessageRequest : BaseRequest() {
 
     var event : Int = 0
     var author: String? = null
-    var recipient: String? = null
+    var parentmessage: Int=-1
     var text: String? = null
     var uuid: String? = null
 

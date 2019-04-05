@@ -112,14 +112,14 @@ object APIHelper {
         RcokoClient.getEvent(request)
     }
 
-    fun sendMessage(appname:String, password:String, author:String, recipient:String,text:String,event:Int, uuid:String){
+    fun sendMessage(appname:String, password:String, author:String, parentmessage:Int,text:String,event:Int, uuid:String){
         val request = SendMessageRequest()
         request.appname = appname
         request.action = ACTION_SEND_MESSAGE
         request.password = password
 
         request.author = author
-        request.recipient = recipient
+        request.parentmessage = parentmessage
         request.text = text
         request.event = event
         request.uuid = uuid

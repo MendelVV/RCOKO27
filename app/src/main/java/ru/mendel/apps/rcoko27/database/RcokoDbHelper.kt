@@ -10,7 +10,7 @@ class RcokoDbHelper(context: Context) : SQLiteOpenHelper(context,DATABASE_NAME,n
     //если это унаследовано от java класса то не нужно указывать имена параметров
 
     companion object {
-        private const val VERSION = 2
+        private const val VERSION = 1
         private const val DATABASE_NAME = "rcoko27.db"
     }
 
@@ -46,8 +46,7 @@ class RcokoDbHelper(context: Context) : SQLiteOpenHelper(context,DATABASE_NAME,n
                 TableMessages.Cols.DATE +", "+
                 TableMessages.Cols.AUTHOR +", "+
                 TableMessages.Cols.AUTHOR_NAME +", "+
-                TableMessages.Cols.RECIPIENT +", "+
-                TableMessages.Cols.RECIPIENT_NAME +", "+
+                TableMessages.Cols.PARENT_MESSAGE +", "+
                 TableMessages.Cols.TEXT +", "+
                 TableMessages.Cols.UUID +", "+
                 TableMessages.Cols.STATE +
@@ -62,12 +61,5 @@ class RcokoDbHelper(context: Context) : SQLiteOpenHelper(context,DATABASE_NAME,n
 
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
         if (db==null) return
-        if (p1<2){
-            db.execSQL("create table " + TableAnswers.NAME + "(" +
-                    TableAnswers.Cols.VOTING +", "+
-                    TableAnswers.Cols.TEXT +", "+
-                    TableAnswers.Cols.SIZE +
-                    ")")
-        }
     }
 }

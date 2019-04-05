@@ -7,5 +7,5 @@ class SendMessageResponse : BaseResponse() {
     var uuid: String? = null
     var date: String? = null
     var code : Int = 0
-
+    var gmt: String? = null
 }

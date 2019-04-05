@@ -58,6 +58,7 @@ class EventMessagesFragment : BaseEventFragment() {
         if (messageData!=null){
             messageData.state = MessageData.STATE_DELIVERED
             messageData.date = response.date
+            messageData.gmt = response.gmt
             RcokoDatabase(activity!!)
             RcokoDatabase.updateMessage(messageData)
             val n = mMessages.indexOf(messageData)+1
@@ -192,7 +193,7 @@ class EventMessagesFragment : BaseEventFragment() {
 
             val messageData = MessageData()
             messageData.author = mLogin
-            messageData.recipient = ""
+            messageData.parentmessage = -1//пока нет возможности написать ответ
             messageData.text = text.toString()
             messageData.event = mEvent!!.code
             messageData.uuid = UUID.randomUUID().toString()
@@ -209,7 +210,7 @@ class EventMessagesFragment : BaseEventFragment() {
             APIHelper.sendMessage(appname = activity!!.packageName,
                 password = mPassword!!,
                 author = messageData.author!!,
-                recipient = messageData.recipient!!,
+                parentmessage = messageData.parentmessage,
                 text = messageData.text!!,
                 event = messageData.event,
                 uuid = messageData.uuid!!)
@@ -236,12 +237,9 @@ class EventMessagesFragment : BaseEventFragment() {
                 }
             }else{
                 itemView.text_external_author.text = mMessageData!!.authorname
-                if (mMessageData!!.recipient==""){
-                    itemView.text_external_recipient.visibility = View.GONE
-                }else{
-                    itemView.text_external_recipient.visibility = View.VISIBLE
-                    itemView.text_external_recipient.text = getString(R.string.to,mMessageData!!.recipientname)
-                }
+
+                itemView.text_external_recipient.visibility = View.GONE
+
                 itemView.text_external_message.text = mMessageData!!.text
                 itemView.text_external_time.text = mMessageData!!.date
             }
@@ -317,7 +315,6 @@ class EventMessagesFragment : BaseEventFragment() {
             } catch (e: IndexOutOfBoundsException) {
                 Log.e("Error", "IndexOutOfBoundsException in RecyclerView happens")
             }
-
         }
     }
 

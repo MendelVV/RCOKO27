@@ -288,12 +288,11 @@ class RcokoDatabase(context: Context) {
             cv.put(TableMessages.Cols.EVENT,message.event)
             cv.put(TableMessages.Cols.AUTHOR,message.author)
             cv.put(TableMessages.Cols.AUTHOR_NAME,message.authorname)
-            cv.put(TableMessages.Cols.RECIPIENT,message.recipient)
-            cv.put(TableMessages.Cols.RECIPIENT_NAME,message.recipientname)
+            cv.put(TableMessages.Cols.PARENT_MESSAGE,message.parentmessage)
             cv.put(TableMessages.Cols.TEXT,message.text)
             cv.put(TableMessages.Cols.UUID,message.uuid)
             cv.put(TableMessages.Cols.STATE,message.state)
-            val date = if (message.date!=null){
+            val date = if (message.date!=null && message.date!="none"){
                 MessageData.convertData(message.date!!,message.gmt!!)
             }else{
                 "none"

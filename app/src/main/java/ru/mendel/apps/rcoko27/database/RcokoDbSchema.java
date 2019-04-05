@@ -60,8 +60,7 @@ public class RcokoDbSchema {
             public static final String DATE = "date";
             public static final String AUTHOR = "author";
             public static final String AUTHOR_NAME = "author_name";
-            public static final String RECIPIENT = "recipient";
-            public static final String RECIPIENT_NAME = "recipient_name";
+            public static final String PARENT_MESSAGE = "parent_message";
             public static final String TEXT = "text";
             public static final String UUID = "uuid";
             public static final String STATE = "state";

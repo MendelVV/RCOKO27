@@ -78,8 +78,7 @@ class RcokoCursorWrapper (cursor: Cursor): CursorWrapper(cursor) {
         val date = getString(getColumnIndex(TableMessages.Cols.DATE))
         val author = getString(getColumnIndex(TableMessages.Cols.AUTHOR))
         val authorName = getString(getColumnIndex(TableMessages.Cols.AUTHOR_NAME))
-        val recipient = getString(getColumnIndex(TableMessages.Cols.RECIPIENT))
-        val recipientName = getString(getColumnIndex(TableMessages.Cols.RECIPIENT_NAME))
+        val parentMessage = getInt(getColumnIndex(TableMessages.Cols.PARENT_MESSAGE))
         val text = getString(getColumnIndex(TableMessages.Cols.TEXT))
         val uuid = getString(getColumnIndex(TableMessages.Cols.UUID))
         val state = getInt(getColumnIndex(TableMessages.Cols.STATE))
@@ -91,8 +90,7 @@ class RcokoCursorWrapper (cursor: Cursor): CursorWrapper(cursor) {
         messageData.date = date
         messageData.author = author
         messageData.authorname = authorName
-        messageData.recipient = recipient
-        messageData.recipientname = recipientName
+        messageData.parentmessage = parentMessage
         messageData.text = text
         messageData.uuid = uuid
         messageData.state = state
