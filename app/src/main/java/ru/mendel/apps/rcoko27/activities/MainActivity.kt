@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         setBottomMenu()
         mCurrentFragment = EventsListFragment()
         supportFragmentManager.beginTransaction().add(R.id.fragment_layout, mCurrentFragment).commit()
