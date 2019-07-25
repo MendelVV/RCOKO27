@@ -48,8 +48,8 @@ class EventMessagesFragment : BaseEventFragment() {
     private var mMessages: MutableList<MessageData> = mutableListOf()
     private var mEvent: EventData? = null
     private var mAdapter : MessageAdapter? = null
+    private var mToken: String? = null
     private var mLogin: String? = null
-    private var mPassword: String? = null
     private lateinit var mHandler: UpdateMessageHandler
 
     private fun actionSendMessage(message: BaseResponse){
@@ -152,8 +152,8 @@ class EventMessagesFragment : BaseEventFragment() {
         mEvent = RcokoDatabase.getEvent(code)
         mMessages = RcokoDatabase.getMessages(code)
 
+        mToken = QueryPreference.getToken(activity!!)
         mLogin = QueryPreference.getLogin(activity!!)
-        mPassword = QueryPreference.getPassword(activity!!)
 
     }
 
@@ -174,8 +174,7 @@ class EventMessagesFragment : BaseEventFragment() {
     private fun updateMessages(){
         try{
             APIHelper.updateMessages(appname = activity!!.packageName,
-                email = mLogin!!,
-                password = mPassword!!,
+                token = mToken!!,
                 event = mEvent!!.code)
 
             val msg = Message()
@@ -208,8 +207,7 @@ class EventMessagesFragment : BaseEventFragment() {
             RcokoDatabase.insertMessage(messageData)
 
             APIHelper.sendMessage(appname = activity!!.packageName,
-                password = mPassword!!,
-                author = messageData.author!!,
+                token = mToken!!,
                 parentmessage = messageData.parentmessage,
                 text = messageData.text!!,
                 event = messageData.event,

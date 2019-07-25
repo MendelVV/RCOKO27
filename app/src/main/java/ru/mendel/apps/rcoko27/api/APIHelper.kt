@@ -65,99 +65,81 @@ object APIHelper {
         RcokoClient.registration(request)
     }
 
-    fun refreshEvents(appname:String, email:String, password:String, start:Int, size: Int){
+    fun refreshEvents(appname:String, token: String, start:Int, size: Int){
         val request = GetDataRequest()
         request.appname = appname
         request.action = ACTION_REFRESH_EVENTS
-        request.email = email
-        request.password = password
         request.start = start
         request.size = size
-
-        RcokoClient.getData(request)
+        RcokoClient.getData(request, token)
     }
 
-    fun getEvents(appname:String, email:String, password:String, start:Int, size: Int){
+    fun getEvents(appname:String, token:String, start:Int, size: Int){
         val request = GetDataRequest()
         request.appname = appname
         request.action = ACTION_GET_EVENTS
-        request.email = email
-        request.password = password
         request.start = start
         request.size = size
 
-        RcokoClient.getData(request)
+        RcokoClient.getData(request, token)
     }
 
-    fun updateEvents(appname:String, email:String, password:String, start:String, end: String){
+    fun updateEvents(appname:String, token:String, start:String, end: String){
         val request = UpdateEventsRequest()
         request.appname = appname
         request.action = ACTION_UPDATE_EVENTS
-        request.email = email
-        request.password = password
         request.start = start//дата первого события
         request.end = end//дата последнего события
 
-        RcokoClient.updateEvents(request)
+        RcokoClient.updateEvents(request, token)
     }
 
-    fun getEvent(appname:String, email:String, password:String, code:Int){
+    fun getEvent(appname:String, token:String, code:Int){
         val request = GetEventRequest()
         request.appname = appname
         request.action = ACTION_GET_EVENT
-        request.email = email
-        request.password = password
         request.code = code
 
-        RcokoClient.getEvent(request)
+        RcokoClient.getEvent(request, token)
     }
 
-    fun sendMessage(appname:String, password:String, author:String, parentmessage:Int,text:String,event:Int, uuid:String){
+    fun sendMessage(appname:String, token:String, parentmessage:Int,text:String,event:Int, uuid:String){
         val request = SendMessageRequest()
         request.appname = appname
         request.action = ACTION_SEND_MESSAGE
-        request.password = password
-
-        request.author = author
         request.parentmessage = parentmessage
         request.text = text
         request.event = event
         request.uuid = uuid
 
-        RcokoClient.sendMessage(request)
+        RcokoClient.sendMessage(request, token)
     }
 
-    fun updateMessages(appname:String, email:String, password:String, event:Int){
+    fun updateMessages(appname:String, token:String, event:Int){
         val request = UpdateMessagesRequest()
 
         request.appname = appname
         request.action = ACTION_UPDATE_MESSAGES
-        request.password = password
-        request.email = email
         request.event = event
 
-        RcokoClient.updateMessages(request)
+        RcokoClient.updateMessages(request, token)
     }
 
-    fun vote(appname:String, email:String, password:String, voting:Int,answer:Int){
+    fun vote(appname:String, token:String, voting:Int,answer:Int){
         val request = VoteRequest()
         request.appname = appname
         request.action = ACTION_VOTE
-        request.password = password
-        request.email = email
         request.voting = voting
         request.answer = answer
 
-        RcokoClient.vote(request)
+        RcokoClient.vote(request, token)
     }
 
-    fun getActivities(appname:String, email:String, password:String){
+    fun getActivities(appname:String, token:String){
         val request = ActivitiesRequest()
         request.appname = appname
         request.action = ACTION_GET_ACTIVITIES
-        request.password = password
-        request.email = email
 
-        RcokoClient.getActivities(request)
+        RcokoClient.getActivities(request, token)
     }
 }

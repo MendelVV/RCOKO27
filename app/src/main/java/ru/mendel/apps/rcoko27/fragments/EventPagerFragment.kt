@@ -36,8 +36,7 @@ class EventPagerFragment : BaseEventFragment() {
 
     }
 
-    private var mLogin: String? = null
-    private var mPassword: String? = null
+    private var mToken: String? = null
     private lateinit var mPagerAdapter: PagerAdapter
     private var mEventCode : Int = -1
     private var mEvent: EventData?=null
@@ -87,8 +86,7 @@ class EventPagerFragment : BaseEventFragment() {
         super.onCreate(savedInstanceState)
         mEventCode = arguments!!.getInt(CODE)
 
-        mLogin = QueryPreference.getLogin(activity!!)
-        mPassword = QueryPreference.getPassword(activity!!)
+        mToken = QueryPreference.getToken(activity!!)
 
     }
 
@@ -115,8 +113,7 @@ class EventPagerFragment : BaseEventFragment() {
 
     private fun loadEvent(){
         APIHelper.getEvent(appname = activity!!.packageName,
-            email = mLogin!!,
-            password = mPassword!!,
+            token = mToken!!,
             code = mEventCode)
     }
 
@@ -124,10 +121,10 @@ class EventPagerFragment : BaseEventFragment() {
 
         override fun getItem(pos: Int): Fragment {
             if (mEvent!=null){
-                when (pos){
-                    0->return EventMessagesFragment.newInstance(mEventCode)
-                    1->return EventVotingFragment.newInstance(mEventCode)
-                    else -> return Fragment()
+                return when (pos){
+                    0-> EventMessagesFragment.newInstance(mEventCode)
+                    1-> EventVotingFragment.newInstance(mEventCode)
+                    else -> Fragment()
                 }
             }else{
                 return Fragment()

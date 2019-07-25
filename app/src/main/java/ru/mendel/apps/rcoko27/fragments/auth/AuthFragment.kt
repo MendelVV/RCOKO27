@@ -64,6 +64,7 @@ class AuthFragment : AbstractAuthFragment() {
             showMessage(R.string.need_specify_auth_data)
         }else{
             val token = UUID.randomUUID().toString()
+            QueryPreference.setToken(activity!!, token)
             APIHelper.sendAutoLogin(appname = activity!!.packageName,
                 email = view!!.text_email.text.toString(),
                 password = view!!.text_password.text.toString(),

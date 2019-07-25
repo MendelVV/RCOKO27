@@ -7,10 +7,7 @@ import org.junit.Test
 import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.api.RcokoClient
 import ru.mendel.apps.rcoko27.api.requests.GetDataRequest
-import ru.mendel.apps.rcoko27.api.responses.ActivitiesResponse
-import ru.mendel.apps.rcoko27.api.responses.GetDataResponse
-import ru.mendel.apps.rcoko27.api.responses.GetEventResponse
-import ru.mendel.apps.rcoko27.api.responses.UpdateMessagesResponse
+import ru.mendel.apps.rcoko27.api.responses.*
 
 import ru.mendel.apps.rcoko27.data.ActionData
 import ru.mendel.apps.rcoko27.reactive.ActionDataObserver
@@ -24,12 +21,13 @@ class ApiTest {
         const val APP_NAME = "ru.mendel.apps.rcoko27"
         const val LOGIN = "mendel_ww@mail.ru"
         const val PASSWORD = "77uter24"
+        const val TOKEN = "0ffe9501-d346-45e6-b77e-e24a43ddec47"
     }
 
     @Before
     fun initTest() {
         //срабатывает перед каждым тестом
-        System.out.println("before")
+        println("before")
     }
 
     @After
@@ -73,8 +71,7 @@ class ApiTest {
         ReactiveSubject.addSubscribe(observer)
 
         APIHelper.getEvents(appname = APP_NAME,
-            email = LOGIN,
-            password = PASSWORD,
+            token = TOKEN,
             start = 0,
             size = 5)
 
@@ -98,8 +95,7 @@ class ApiTest {
         ReactiveSubject.addSubscribe(observer)
 
         APIHelper.getEvent(appname = APP_NAME,
-            email = LOGIN,
-            password = PASSWORD,
+            token = TOKEN,
             code = 28)
 
 
@@ -122,8 +118,7 @@ class ApiTest {
         ReactiveSubject.addSubscribe(observer)
 
         APIHelper.updateMessages(appname = APP_NAME,
-            email = LOGIN,
-            password = PASSWORD,
+            token = TOKEN,
             event = 1)
 
         while (b){
@@ -133,6 +128,29 @@ class ApiTest {
         observer.onComplete()
     }
 
+    @Test(timeout = 7000)
+    fun sendMessages() {
+        var b = true
+        val observer = ResponseObserver{x->
+            assert(x.result=="ok")
+            val response = x as SendMessageResponse
+            b=false
+        }
+        ReactiveSubject.addSubscribe(observer)
+
+        APIHelper.sendMessage(appname = APP_NAME,
+            token = TOKEN,
+            parentmessage = -1,
+            text="Test text",
+            event = 1,
+            uuid = UUID.randomUUID().toString())
+
+        while (b){
+            Thread.sleep(100)
+            //тут просто ждем пока все не закончится
+        }
+        observer.onComplete()
+    }
 
     @Test(timeout = 7000)
     fun getActivities() {
@@ -141,17 +159,16 @@ class ApiTest {
             assert(x.result=="ok")
             val response = x as ActivitiesResponse
             for (data in response.activities){
-                System.out.println(data.toString())
+                println(data.toString())
             }
-            System.out.println("events.size=${response.events.size} voting.size=${response.votings.size}")
+            println("events.size=${response.events.size} voting.size=${response.votings.size}")
 //            assert(response.messages.size>0)
             b=false
         }
         ReactiveSubject.addSubscribe(observer)
 
         APIHelper.getActivities(appname = APP_NAME,
-            email = LOGIN,
-            password = PASSWORD)
+            token = TOKEN)
 
         while (b){
             Thread.sleep(100)

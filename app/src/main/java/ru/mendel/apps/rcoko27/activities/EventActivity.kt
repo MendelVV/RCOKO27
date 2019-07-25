@@ -28,7 +28,7 @@ class EventActivity : AppCompatActivity() {
         val code = intent.getIntExtra(CODE,-1)
 
         val fragment = EventPagerFragment.newInstance(code)
-        supportFragmentManager.beginTransaction().add(R.id.fragment_layout, fragment).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_layout, fragment).commit()
     }
 
 }

@@ -70,7 +70,7 @@ class PossibleRecyclerView : RecyclerView {
         if (e!!.action==MotionEvent.ACTION_DOWN){
             callOnClick()
         }
-        return true
+        return false
     }
 
     inner class PossibleHolder(itemView: View) : ViewHolder(itemView){

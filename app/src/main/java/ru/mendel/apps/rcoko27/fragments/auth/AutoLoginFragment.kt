@@ -95,6 +95,7 @@ class AutoLoginFragment : AbstractAuthFragment(){
     private fun auth(){
         //проверяем заполнение полей
         val token = UUID.randomUUID().toString()
+        QueryPreference.setToken(activity!!, token)
         APIHelper.sendAutoLogin(appname = activity!!.packageName,
             email = mLogin!!,
             password = mPassword!!,

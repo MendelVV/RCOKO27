@@ -35,8 +35,7 @@ class EventsListFragment : BaseEventFragment() {
         const val SIZE = 5
     }
 
-    private var mLogin: String? = null
-    private var mPassword: String? = null
+    private var mToken: String? = null
     private val mList : MutableList<EventData> = mutableListOf()
     private lateinit var mAdapter : EventAdapter
     private var mIsStartLoad = false
@@ -127,9 +126,7 @@ class EventsListFragment : BaseEventFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mLogin = QueryPreference.getLogin(activity!!)
-        mPassword = QueryPreference.getPassword(activity!!)
-
+        mToken = QueryPreference.getToken(activity!!)
     }
 
     override fun onStart() {
@@ -197,8 +194,7 @@ class EventsListFragment : BaseEventFragment() {
         if (mList.size<=0) return
 
         APIHelper.updateEvents(appname = activity!!.packageName,
-            email = mLogin!!,
-            password = mPassword!!,
+            token = mToken!!,
             start = mList.first().dateevent!!,
             end = mList.last().dateevent!!)
     }
@@ -208,8 +204,7 @@ class EventsListFragment : BaseEventFragment() {
         mIsStartLoad = true
 
         APIHelper.refreshEvents(appname = activity!!.packageName,
-            email = mLogin!!,
-            password = mPassword!!,
+            token = mToken!!,
             start = 0,
             size = SIZE)
     }
@@ -219,8 +214,7 @@ class EventsListFragment : BaseEventFragment() {
         mIsStartLoad = true
 
         APIHelper.getEvents(appname = activity!!.packageName,
-            email = mLogin!!,
-            password = mPassword!!,
+            token = mToken!!,
             start = start,
             size = SIZE)
 

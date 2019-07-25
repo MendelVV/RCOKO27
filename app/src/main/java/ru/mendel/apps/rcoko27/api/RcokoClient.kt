@@ -15,10 +15,11 @@ import java.net.SocketTimeoutException
 
 object RcokoClient {
     //класс отправляющий запросы на сервер и получающий ответы
-//    const val IMAGE_URL = "http://192.168.43.14/rcoko27/resources/"
-    const val IMAGE_URL = "http://10.0.0.74/rcoko27/resources/"
-//    private const val BASE_URL = "http://192.168.43.14/rcoko27/api/"
-    private const val BASE_URL = "http://10.0.0.74/rcoko27/api/"
+    const val IMAGE_URL = "http://192.168.43.14/rcoko27/resources/"
+    private const val BASE_URL = "http://192.168.43.14/rcoko27/api/"
+
+//    const val IMAGE_URL = "http://10.0.0.74/rcoko27/resources/"
+//    private const val BASE_URL = "http://10.0.0.74/rcoko27/api/"
 
 
     private val retrofit = Retrofit.Builder()
@@ -32,7 +33,7 @@ object RcokoClient {
         service.reg(request).enqueue(
             object : Callback<RegResponse> {
 
-                override fun onResponse(call: Call<RegResponse>, response: retrofit2.Response<RegResponse>) {
+                override fun onResponse(call: Call<RegResponse>, response: Response<RegResponse>) {
                     val res = response.body()!!
                     if (res.result=="ok"){
                         val action = ActionData(ActionData.ACTION_TO_NEXT)
@@ -55,15 +56,16 @@ object RcokoClient {
         service.regCode(request).enqueue(
             object : Callback<RegResponse> {
 
-                override fun onResponse(call: Call<RegResponse>, response: retrofit2.Response<RegResponse>) {
+                override fun onResponse(call: Call<RegResponse>, response: Response<RegResponse>) {
                     val res = response.body()!!
-                    if (res.result=="ok"){
-                        val action = ActionData(ActionData.ACTION_TO_NEXT)
-                        ReactiveSubject.next(action)
-                    }else if (res.result=="error"){
-                        baseError(res)
-                    }else{
-                        unknownError()
+                    when {
+                        res.result=="empty" ->{}
+                        res.result=="ok" -> {
+                            val action = ActionData(ActionData.ACTION_TO_NEXT)
+                            ReactiveSubject.next(action)
+                        }
+                        res.result=="error" -> baseError(res)
+                        else -> unknownError()
                     }
                 }
 
@@ -78,15 +80,16 @@ object RcokoClient {
         service.registration(request).enqueue(
             object : Callback<RegResponse> {
 
-                override fun onResponse(call: Call<RegResponse>, response: retrofit2.Response<RegResponse>) {
+                override fun onResponse(call: Call<RegResponse>, response: Response<RegResponse>) {
                     val res = response.body()!!
-                    if (res.result=="ok"){
-                        val action = ActionData(ActionData.ACTION_TO_MAIN)
-                        ReactiveSubject.next(action)
-                    }else if (res.result=="error"){
-                        baseError(res)
-                    }else{
-                        unknownError()
+                    when {
+                        res.result=="empty" ->{}
+                        res.result=="ok" -> {
+                            val action = ActionData(ActionData.ACTION_TO_MAIN)
+                            ReactiveSubject.next(action)
+                        }
+                        res.result=="error" -> baseError(res)
+                        else -> unknownError()
                     }
                 }
 
@@ -104,13 +107,14 @@ object RcokoClient {
 
                 override fun onResponse(call: Call<RegResponse>, response: Response<RegResponse>) {
                     val res = response.body()!!
-                    if (res.result=="ok"){
-                        val action = ActionData(ActionData.ACTION_TO_MAIN)
-                        ReactiveSubject.next(action)
-                    }else if (res.result=="error"){
-                        baseError(res)
-                    }else{
-                        unknownError()
+                    when {
+                        res.result=="empty" ->{}
+                        res.result=="ok" -> {
+                            val action = ActionData(ActionData.ACTION_TO_MAIN)
+                            ReactiveSubject.next(action)
+                        }
+                        res.result=="error" -> baseError(res)
+                        else -> unknownError()
                     }
                 }
 
@@ -122,22 +126,21 @@ object RcokoClient {
         )
     }
 
-    fun getData(request: GetDataRequest){
-        service.getData(request).enqueue(
+    fun getData(request: GetDataRequest, token: String){
+        service.getData(token, request).enqueue(
             object : Callback<GetDataResponse> {
 
                 override fun onResponse(call: Call<GetDataResponse>, response: Response<GetDataResponse>) {
                     val res = response.body()!!
-                    System.out.println(res.result)
-                    if (res.result=="ok"){
-//                        Log.d("MyTag","ok "+res.data.size)
-                        ReactiveSubject.next(res)//отправили ответ
-                    }else if (res.result=="error"){
-//                        Log.d("MyTag","getData error")
-                        baseError(res)
-                    }else{
-//                        Log.d("MyTag","getData unknowError")
-                        unknownError()
+                    println(res.result)
+                    when {
+                        res.result=="empty" ->{}
+                        res.result=="ok" -> //                        Log.d("MyTag","ok "+res.data.size)
+                            ReactiveSubject.next(res)//отправили ответ
+                        res.result=="error" -> //                        Log.d("MyTag","getData error")
+                            baseError(res)
+                        else -> //                        Log.d("MyTag","getData unknowError")
+                            unknownError()
                     }
                 }
 
@@ -150,20 +153,19 @@ object RcokoClient {
         )
     }
 
-    fun getEvent(request: GetEventRequest){
+    fun getEvent(request: GetEventRequest, token: String){
 
-        service.getEvent(request).enqueue(
+        service.getEvent(token, request).enqueue(
             object : Callback<GetEventResponse> {
 
                 override fun onResponse(call: Call<GetEventResponse>, response: Response<GetEventResponse>) {
 
                     val res = response.body()!!
-                    if (res.result=="ok"){
-                        ReactiveSubject.next(res)//отправили ответ
-                    }else if (res.result=="error"){
-                        baseError(res)
-                    }else{
-                        unknownError()
+                    when {
+                        res.result=="empty" ->{}
+                        res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
+                        res.result=="error" -> baseError(res)
+                        else -> unknownError()
                     }
                 }
 
@@ -176,19 +178,18 @@ object RcokoClient {
         )
     }
 
-    fun sendMessage(request: SendMessageRequest){
+    fun sendMessage(request: SendMessageRequest, token:String){
 
-        service.sendMessage(request).enqueue(
+        service.sendMessage(token, request).enqueue(
             object : Callback<SendMessageResponse> {
 
                 override fun onResponse(call: Call<SendMessageResponse>, response: Response<SendMessageResponse>) {
                     val res = response.body()!!
-                    if (res.result=="ok"){
-                        ReactiveSubject.next(res)//отправили ответ
-                    }else if (res.result=="error"){
-                        baseError(res)
-                    }else{
-                        unknownError()
+                    when {
+                        res.result=="empty" ->{}
+                        res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
+                        res.result=="error" -> baseError(res)
+                        else -> unknownError()
                     }
                 }
 
@@ -201,19 +202,18 @@ object RcokoClient {
         )
     }
 
-    fun vote(request: VoteRequest){
+    fun vote(request: VoteRequest, token:String){
 
-        service.vote(request).enqueue(
+        service.vote(token, request).enqueue(
             object : Callback<VoteResponse> {
 
                 override fun onResponse(call: Call<VoteResponse>, response: Response<VoteResponse>) {
                     val res = response.body()!!
-                    if (res.result=="ok"){
-                        ReactiveSubject.next(res)//отправили ответ
-                    }else if (res.result=="error"){
-                        baseError(res)
-                    }else{
-                        unknownError()
+                    when {
+                        res.result=="empty" ->{}
+                        res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
+                        res.result=="error" -> baseError(res)
+                        else -> unknownError()
                     }
                 }
 
@@ -226,19 +226,18 @@ object RcokoClient {
         )
     }
 
-    fun getActivities(request: ActivitiesRequest){
+    fun getActivities(request: ActivitiesRequest, token:String){
 
-        service.getActivities(request).enqueue(
+        service.getActivities(token, request).enqueue(
             object : Callback<ActivitiesResponse> {
 
                 override fun onResponse(call: Call<ActivitiesResponse>, response: Response<ActivitiesResponse>) {
                     val res = response.body()!!
-                    if (res.result=="ok"){
-                        ReactiveSubject.next(res)//отправили ответ
-                    }else if (res.result=="error"){
-                        baseError(res)
-                    }else{
-                        unknownError()
+                    when {
+                        res.result=="empty" ->{}
+                        res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
+                        res.result=="error" -> baseError(res)
+                        else -> unknownError()
                     }
                 }
 
@@ -251,18 +250,17 @@ object RcokoClient {
         )
     }
 
-    fun updateEvents(request: UpdateEventsRequest){
-        service.updateEvents(request).enqueue(
+    fun updateEvents(request: UpdateEventsRequest, token:String){
+        service.updateEvents(token, request).enqueue(
             object : Callback<UpdateEventsResponse> {
 
                 override fun onResponse(call: Call<UpdateEventsResponse>, response: Response<UpdateEventsResponse>) {
                     val res = response.body()!!
-                    if (res.result=="ok"){
-                        ReactiveSubject.next(res)//отправили ответ
-                    }else if (res.result=="error"){
-                        baseError(res)
-                    }else{
-                        unknownError()
+                    when {
+                        res.result=="empty" ->{}
+                        res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
+                        res.result=="error" -> baseError(res)
+                        else -> unknownError()
                     }
                 }
 
@@ -270,23 +268,21 @@ object RcokoClient {
                     Log.i("MyTag","updateEvents")
                     verifyError(t)
                 }
-
             }
         )
     }
 
-    fun updateMessages(request: UpdateMessagesRequest){
-        service.updateMessages(request).enqueue(
+    fun updateMessages(request: UpdateMessagesRequest, token:String){
+        service.updateMessages(token, request).enqueue(
             object : Callback<UpdateMessagesResponse> {
 
                 override fun onResponse(call: Call<UpdateMessagesResponse>, response: Response<UpdateMessagesResponse>) {
                     val res = response.body()!!
-                    if (res.result=="ok"){
-                        ReactiveSubject.next(res)//отправили ответ
-                    }else if (res.result=="error"){
-                        baseError(res)
-                    }else{
-                        unknownError()
+                    when {
+                        res.result=="empty" ->{}
+                        res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
+                        res.result=="error" -> baseError(res)
+                        else -> unknownError()
                     }
                 }
 

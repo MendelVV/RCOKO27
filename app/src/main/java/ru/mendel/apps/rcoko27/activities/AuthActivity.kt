@@ -19,15 +19,14 @@ class AuthActivity : AppCompatActivity() {
         if (login!=null && password!=null){
             //переходим к фрагметну который пытается войти в приложение
             val fragment = AutoLoginFragment()
-            supportFragmentManager.beginTransaction().add(R.id.fragment_layout, fragment).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_layout, fragment).commit()
         }else{
             //переходим к фрагменту регистрации
             val fragment = RegFragment()
-            supportFragmentManager.beginTransaction().add(R.id.fragment_layout, fragment).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_layout, fragment).commit()
         }
 
-/*        val fragment = RegFragment()
-        supportFragmentManager.beginTransaction().add(R.id.fragment_layout, fragment).commit()*/
+
 
 /*        val intent = Intent(this@AuthActivity, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK

@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         setBottomMenu()
         mCurrentFragment = EventsListFragment()
-        supportFragmentManager.beginTransaction().add(R.id.fragment_layout, mCurrentFragment).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_layout, mCurrentFragment).commit()
     }
 
     private fun setBottomMenu(){

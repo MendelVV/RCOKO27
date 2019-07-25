@@ -21,27 +21,26 @@ interface APIService {
     fun registration(@Body req: RegistrationRequest): Call<RegResponse>
 
     @POST("registration.php")
-//    fun autoLogin(@Body req: AutoLoginRequest): Call<RegResponse>
     fun autoLogin(@Header("token") token:String,  @Body req: AutoLoginRequest): Call<RegResponse>
 
     @POST("get_data.php")
-    fun getData(@Body req: GetDataRequest): Call<GetDataResponse>
+    fun getData(@Header("token") token:String, @Body req: GetDataRequest): Call<GetDataResponse>
 
     @POST("get_data.php")
-    fun getEvent(@Body req: GetEventRequest): Call<GetEventResponse>
+    fun getEvent(@Header("token") token:String, @Body req: GetEventRequest): Call<GetEventResponse>
 
     @POST("send_message.php")
-    fun sendMessage(@Body req: SendMessageRequest): Call<SendMessageResponse>
+    fun sendMessage(@Header("token") token:String, @Body req: SendMessageRequest): Call<SendMessageResponse>
 
     @POST("vote.php")
-    fun vote(@Body req: VoteRequest): Call<VoteResponse>
+    fun vote(@Header("token") token:String, @Body req: VoteRequest): Call<VoteResponse>
 
     @POST("get_data.php")
-    fun updateEvents(@Body req: UpdateEventsRequest): Call<UpdateEventsResponse>
+    fun updateEvents(@Header("token") token:String, @Body req: UpdateEventsRequest): Call<UpdateEventsResponse>
 
     @POST("get_data.php")
-    fun updateMessages(@Body req: UpdateMessagesRequest): Call<UpdateMessagesResponse>
+    fun updateMessages(@Header("token") token:String, @Body req: UpdateMessagesRequest): Call<UpdateMessagesResponse>
 
     @POST("activities.php")
-    fun getActivities(@Body req: ActivitiesRequest) : Call<ActivitiesResponse>
+    fun getActivities(@Header("token") token:String, @Body req: ActivitiesRequest) : Call<ActivitiesResponse>
 }

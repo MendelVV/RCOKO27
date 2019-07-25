@@ -32,8 +32,7 @@ class ActivitiesFragment : BaseEventFragment() {
     }
 
 
-    private var mLogin: String? = null
-    private var mPassword: String? = null
+    private var mToken: String? = null
     private val mActivities: MutableList<ActivitiesData> = mutableListOf()
     private val mData: MutableList<Any> = mutableListOf()
     private lateinit var mAdapter: ActivityAdapter
@@ -73,8 +72,7 @@ class ActivitiesFragment : BaseEventFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mLogin = QueryPreference.getLogin(activity!!)
-        mPassword = QueryPreference.getPassword(activity!!)
+        mToken = QueryPreference.getToken(activity!!)
     }
 
     override fun onStart() {
@@ -106,7 +104,8 @@ class ActivitiesFragment : BaseEventFragment() {
 
     private fun loadActivities(){
         //загружаем последние активности
-        APIHelper.getActivities(activity!!.packageName,mLogin!!,mPassword!!)
+        APIHelper.getActivities(appname = activity!!.packageName,
+            token = mToken!!)
     }
 
     inner class ActivityHolder(itemView:View) : RecyclerView.ViewHolder(itemView){

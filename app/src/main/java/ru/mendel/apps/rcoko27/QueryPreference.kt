@@ -6,6 +6,7 @@ import android.preference.PreferenceManager
 object QueryPreference {
     private const val PREF_LOGIN = "login"
     private const val PREF_PASSWORD = "password"
+    private const val PREF_TOKEN = "token"
 
     fun getLogin(context: Context): String?{
         return PreferenceManager.getDefaultSharedPreferences(context).getString(PREF_LOGIN, null)
@@ -26,6 +27,17 @@ object QueryPreference {
         PreferenceManager.getDefaultSharedPreferences(context)
             .edit()
             .putString(PREF_PASSWORD, query)
+            .apply()
+    }
+
+    fun getToken(context: Context): String?{
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(PREF_TOKEN, null)
+    }
+
+    fun setToken(context: Context, query: String){
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit()
+            .putString(PREF_TOKEN, query)
             .apply()
     }
 

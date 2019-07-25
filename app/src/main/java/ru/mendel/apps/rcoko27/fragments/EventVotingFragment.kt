@@ -37,8 +37,7 @@ class EventVotingFragment : BaseEventFragment(){
         }
     }
 
-    private var mLogin: String? = null
-    private var mPassword: String? = null
+    private var mToken: String? = null
     private var mVoting : MutableList<VotingData> = mutableListOf()
     private var mEventCode = -1
     private lateinit var mAdapter : VotingAdapter
@@ -75,8 +74,7 @@ class EventVotingFragment : BaseEventFragment(){
         mEventCode = arguments!!.getInt(CODE)
         RcokoDatabase(activity!!)
         mVoting = RcokoDatabase.getVoting(mEventCode)
-        mLogin = QueryPreference.getLogin(activity!!)
-        mPassword = QueryPreference.getPassword(activity!!)
+        mToken = QueryPreference.getToken(activity!!)
 
     }
 
@@ -134,11 +132,12 @@ class EventVotingFragment : BaseEventFragment(){
         }
 
         private fun vote(){
+
             val current = itemView.voting_recycler.current
+            if(current==-1) return
 
             APIHelper.vote(appname = activity!!.packageName,
-                email = mLogin!!,
-                password = mPassword!!,
+                token = mToken!!,
                 voting = mVotingData.code,
                 answer = mVotingData.possibles[current].code)
         }
