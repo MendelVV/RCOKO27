@@ -3,8 +3,6 @@ package ru.mendel.apps.rcoko27
 import android.util.Log
 import org.junit.Assert
 import org.junit.Test
-import org.mockito.Mockito
-import org.mockito.Mockito.`when`
 import ru.mendel.apps.rcoko27.data.EventData
 import ru.mendel.apps.rcoko27.data.MessageData
 

@@ -26,6 +26,7 @@ import ru.mendel.apps.rcoko27.data.ActionData
 import ru.mendel.apps.rcoko27.data.EventData
 import ru.mendel.apps.rcoko27.reactive.ReactiveSubject
 import ru.mendel.apps.rcoko27.reactive.ResponseObserver
+import java.lang.IndexOutOfBoundsException
 
 
 class EventsListFragment : BaseEventFragment() {

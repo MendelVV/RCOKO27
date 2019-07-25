@@ -16,6 +16,7 @@ import ru.mendel.apps.rcoko27.data.ActionData
 import ru.mendel.apps.rcoko27.reactive.ActionDataObserver
 import ru.mendel.apps.rcoko27.reactive.ReactiveSubject
 import ru.mendel.apps.rcoko27.reactive.ResponseObserver
+import java.util.*
 
 class ApiTest {
 
@@ -33,7 +34,7 @@ class ApiTest {
 
     @After
     fun afterTest() {
-        System.out.println("after")
+        println("after")
     }
 
     @Test(timeout = 7000)
@@ -43,13 +44,15 @@ class ApiTest {
         val observer = ActionDataObserver{
                 x->
             assert(x.actionName==ActionData.ACTION_TO_MAIN)
-            System.out.println("end")
+            println("end")
             b=false
         }
+        val token = UUID.randomUUID().toString()
         ReactiveSubject.addSubscribe(observer)
         APIHelper.sendAutoLogin(appname = APP_NAME,
             email = LOGIN,
-            password = PASSWORD)
+            password = PASSWORD,
+            token = token)
         while (b){
             Thread.sleep(100)
             //тут просто ждем пока все не закончится
@@ -89,7 +92,7 @@ class ApiTest {
             assert(x.result=="ok")
             val response = x as GetEventResponse
             assert(response.event!!.code==28)
-            System.out.println(response.event!!.icon)
+            println(response.event!!.icon)
             b=false
         }
         ReactiveSubject.addSubscribe(observer)

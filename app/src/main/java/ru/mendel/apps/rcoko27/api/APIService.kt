@@ -2,6 +2,8 @@ package ru.mendel.apps.rcoko27.api
 
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import ru.mendel.apps.rcoko27.api.requests.*
 import ru.mendel.apps.rcoko27.api.responses.*
@@ -19,7 +21,8 @@ interface APIService {
     fun registration(@Body req: RegistrationRequest): Call<RegResponse>
 
     @POST("registration.php")
-    fun autoLogin(@Body req: AutoLoginRequest): Call<RegResponse>
+//    fun autoLogin(@Body req: AutoLoginRequest): Call<RegResponse>
+    fun autoLogin(@Header("token") token:String,  @Body req: AutoLoginRequest): Call<RegResponse>
 
     @POST("get_data.php")
     fun getData(@Body req: GetDataRequest): Call<GetDataResponse>

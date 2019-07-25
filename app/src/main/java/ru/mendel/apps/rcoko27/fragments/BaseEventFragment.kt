@@ -48,9 +48,7 @@ abstract class BaseEventFragment : Fragment(){
 
     }
 
-    protected open fun subscribe(){
-
-    }
+    abstract fun subscribe()
 
     protected fun unsubscribe(){
         for (observer in mObservers){

@@ -15,9 +15,10 @@ import java.net.SocketTimeoutException
 
 object RcokoClient {
     //класс отправляющий запросы на сервер и получающий ответы
-    const val IMAGE_URL = "http://192.168.43.14/rcoko27/resources/"
-    private const val BASE_URL = "http://192.168.43.14/rcoko27/api/"
-//    private const val BASE_URL = "http://10.0.0.72/rcoko27/api/"
+//    const val IMAGE_URL = "http://192.168.43.14/rcoko27/resources/"
+    const val IMAGE_URL = "http://10.0.0.74/rcoko27/resources/"
+//    private const val BASE_URL = "http://192.168.43.14/rcoko27/api/"
+    private const val BASE_URL = "http://10.0.0.74/rcoko27/api/"
 
 
     private val retrofit = Retrofit.Builder()
@@ -96,8 +97,9 @@ object RcokoClient {
         )
     }
 
-    fun autoLogin(request: AutoLoginRequest){
-        service.autoLogin(request).enqueue(
+    fun autoLogin(request: AutoLoginRequest, token: String){
+//        service.autoLogin(request).enqueue(
+        service.autoLogin(token, request).enqueue(
             object : Callback<RegResponse> {
 
                 override fun onResponse(call: Call<RegResponse>, response: Response<RegResponse>) {

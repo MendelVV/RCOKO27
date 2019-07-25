@@ -17,6 +17,7 @@ import ru.mendel.apps.rcoko27.data.ActionData
 import ru.mendel.apps.rcoko27.json.JsonSchema
 import ru.mendel.apps.rcoko27.reactive.ActionDataObserver
 import ru.mendel.apps.rcoko27.reactive.ReactiveSubject
+import java.util.*
 
 class AutoLoginFragment : AbstractAuthFragment(){
 
@@ -93,10 +94,11 @@ class AutoLoginFragment : AbstractAuthFragment(){
 
     private fun auth(){
         //проверяем заполнение полей
-
+        val token = UUID.randomUUID().toString()
         APIHelper.sendAutoLogin(appname = activity!!.packageName,
             email = mLogin!!,
-            password = mPassword!!)
+            password = mPassword!!,
+            token = token)
     }
 
     private fun toReg(){

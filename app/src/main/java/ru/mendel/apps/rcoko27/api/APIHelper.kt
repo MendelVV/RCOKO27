@@ -24,13 +24,13 @@ object APIHelper {
 
     const val ACTION_GET_ACTIVITIES = "get_activities"
 
-    fun sendAutoLogin(appname:String, email:String,password:String){
+    fun sendAutoLogin(appname:String, email:String, password:String, token: String){
         val request = AutoLoginRequest()
         request.appname = appname
         request.action = ACTION_AUTH
         request.email = email
         request.password = password
-        RcokoClient.autoLogin(request)
+        RcokoClient.autoLogin(request, token)
     }
 
     fun sendReg(appname:String, email:String,name:String){
