@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RCOKO27</string>
+    <string name="app_name">РЦОКО27</string>
     <string name="e_mail">Введите e-mail</string>
     <string name="your_name">Ваше имя</string>
     <string name="registration">Регистрация</string>
@@ -11,12 +11,6 @@
     <string name="unknow_error">Что-то пошло не так</string>
     <string name="invalid_code_range">Неверная длина кода</string>
 
-    <string name="url_reg">http://192.168.43.14/rcoko27/api/registration.php</string>
-    <string name="url_reg_code">http://192.168.43.14/rcoko27/api/registration.php</string>
-    <string name="url_reg_role">http://192.168.43.14/rcoko27/api/registration.php</string>
-    <string name="url_auth">http://192.168.43.14/rcoko27/api/registration.php</string>
-    <string name="url_get_data">http://192.168.43.14/rcoko27/api/get_data.php</string>
-    <string name="url_send_message">http://192.168.43.14/rcoko27/api/send_message.php</string>
     <string name="error_code">Неверный код</string>
     <string name="next">Далее</string>
     <string name="input_password">Введите пароль</string>

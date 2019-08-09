@@ -15,11 +15,14 @@ import java.net.SocketTimeoutException
 
 object RcokoClient {
     //класс отправляющий запросы на сервер и получающий ответы
-    const val IMAGE_URL = "http://192.168.43.14/rcoko27/resources/"
-    private const val BASE_URL = "http://192.168.43.14/rcoko27/api/"
+//    const val IMAGE_URL = "http://192.168.43.14/feedback/resources/"
+//    private const val BASE_URL = "http://192.168.43.14/feedback/api/"
 
-//    const val IMAGE_URL = "http://10.0.0.74/rcoko27/resources/"
-//    private const val BASE_URL = "http://10.0.0.74/rcoko27/api/"
+    const val IMAGE_URL = "http://feedback.rcoko27.ru/feedback/resources/"
+    private const val BASE_URL = "http://feedback.rcoko27.ru/feedback/api/"
+
+//    const val IMAGE_URL = "http://10.0.0.74/feedback/resources/"
+//    private const val BASE_URL = "http://10.0.0.74/feedback/api/"
 
 
     private val retrofit = Retrofit.Builder()
@@ -27,7 +30,7 @@ object RcokoClient {
         .addConverterFactory(GsonConverterFactory.create())
         .build()!!
 
-    private val service = retrofit.create<APIService>(APIService::class.java)!!
+    private val service = retrofit.create(APIService::class.java)!!
 
     fun reg(request: RegRequest){
         service.reg(request).enqueue(
