@@ -12,6 +12,7 @@
     <color name="colorText">#1D1D1D</color>
     <color name="colorTextAlt">#FFFFFF</color>
     <color name="colorTextSecond">#464646</color>
+    <color name="colorTextBottom">#707070</color>
     <color name="colorGray">#808080</color>
     <color name="colorGray2">#303F9F</color>
     <color name="colorItemPress">#CACACA</color>

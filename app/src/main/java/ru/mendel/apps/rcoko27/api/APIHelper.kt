@@ -52,7 +52,7 @@ object APIHelper {
         RcokoClient.regCode(request)
     }
 
-    fun sendRegistration(appname:String, email:String, name:String, code:String, password:String, role:Int){
+    fun sendRegistration(appname:String, token: String, email:String, name:String, code:String, password:String, role:Int){
         val request = RegistrationRequest()
         request.appname = appname
         request.action = ACTION_REGISTRATION
@@ -62,7 +62,7 @@ object APIHelper {
         request.password = password
         request.role = role
 
-        RcokoClient.registration(request)
+        RcokoClient.registration(request, token)
     }
 
     fun refreshEvents(appname:String, token: String, start:Int, size: Int){

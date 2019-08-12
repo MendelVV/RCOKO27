@@ -34,7 +34,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/D:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/av/ic_equalizer_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/D:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_remove_red_eye_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -56,9 +56,9 @@
                                   <option name="values">
                                     <map>
                                       <entry key="imageAsset" value="E:\Ресурсы для приложений\RCOKO27\activities.png" />
-                                      <entry key="outputName" value="ic_voted" />
+                                      <entry key="outputName" value="ic_view" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="d40201" />
+                                      <entry key="themeColor" value="bdbdbd" />
                                     </map>
                                   </option>
                                 </PersistentState>

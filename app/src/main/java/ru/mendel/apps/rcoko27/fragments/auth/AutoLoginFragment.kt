@@ -67,6 +67,7 @@ class AutoLoginFragment : AbstractAuthFragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.auto_login_fragment,container,false)
         view.button_again.setOnClickListener { again() }
+        view.button_reg.setOnClickListener { toReg() }
         view.text_sign_in.setOnClickListener{ again() }
         return view
     }
@@ -84,11 +85,13 @@ class AutoLoginFragment : AbstractAuthFragment(){
     private fun noNetwork(){
         view!!.progress_bar.visibility = View.INVISIBLE
         view!!.button_again.visibility = View.VISIBLE
+        view!!.button_reg.visibility = View.VISIBLE
     }
 
     private fun again(){
         view!!.progress_bar.visibility = View.VISIBLE
         view!!.button_again.visibility = View.INVISIBLE
+        view!!.button_reg.visibility = View.INVISIBLE
         auth()
     }
 
@@ -105,7 +108,6 @@ class AutoLoginFragment : AbstractAuthFragment(){
     private fun toReg(){
         //код перехода ко второму фрагменту
         val fragment = RegFragment()
-
         activity!!.supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_layout, fragment)

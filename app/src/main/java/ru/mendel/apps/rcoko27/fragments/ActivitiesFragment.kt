@@ -1,5 +1,6 @@
 package ru.mendel.apps.rcoko27.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -11,8 +12,10 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activities_fragment.view.*
 import kotlinx.android.synthetic.main.activities_message_item.view.*
 import kotlinx.android.synthetic.main.activities_vote_item.view.*
+import kotlinx.android.synthetic.main.settings_item.view.*
 import ru.mendel.apps.rcoko27.QueryPreference
 import ru.mendel.apps.rcoko27.R
+import ru.mendel.apps.rcoko27.activities.AuthActivity
 import ru.mendel.apps.rcoko27.activities.EventActivity
 import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.api.responses.ActivitiesResponse
@@ -29,6 +32,7 @@ class ActivitiesFragment : BaseEventFragment() {
     companion object {
         const val TYPE_VOTE = 0
         const val TYPE_MESSAGES = 1
+        const val TYPE_SETTINGS = 2
     }
 
 
@@ -114,7 +118,6 @@ class ActivitiesFragment : BaseEventFragment() {
         var mActivitiesData: ActivitiesData? = null
 
         init {
-            itemView.setOnClickListener {openEvent()}
         }
 
         private fun openEvent(){
@@ -126,6 +129,7 @@ class ActivitiesFragment : BaseEventFragment() {
         }
 
         fun bindMessages(activitiesData: ActivitiesData, event: EventData){
+            itemView.setOnClickListener {openEvent()}
             mActivitiesData = activitiesData
             mCurrentData = event
             itemView.message_event.text = event.title
@@ -135,13 +139,34 @@ class ActivitiesFragment : BaseEventFragment() {
         }
 
         fun bindVote(activitiesData: ActivitiesData, vote: VotingData){
+//            itemView.setOnClickListener {openEvent()}
             mActivitiesData = activitiesData
             mCurrentData = vote
             itemView.vote_question.text = vote.text
             itemView.voting_recycler.setAnswers(vote.answers)
-            itemView.voting_recycler.setOnClickListener{openEvent()}
+            itemView.button_open_event.setOnClickListener{openEvent()}
             itemView.vote_date.text = MessageData.convertData(mActivitiesData!!.date!!,mGmt!!)
         }
+
+        fun bindSettings(){
+            itemView.setOnClickListener {null}
+            itemView.button_exit.setOnClickListener{ exit() }
+            itemView.button_settings.setOnClickListener { settings() }
+        }
+
+        private fun exit(){
+            //достаточно будет обнуть настройки, закрыть это activity и открыть авторзацию
+            QueryPreference.setLogin(activity!!, null)
+            QueryPreference.setPassword(activity!!, null)
+            val intent = Intent(activity!!.applicationContext, AuthActivity::class.java)
+            startActivity(intent)
+            activity!!.finish()
+        }
+
+        private fun settings(){
+
+        }
+
     }
 
     inner class ActivityAdapter : RecyclerView.Adapter<ActivityHolder>(){
@@ -151,24 +176,31 @@ class ActivitiesFragment : BaseEventFragment() {
             val view = when (type){
                 TYPE_MESSAGES -> inflater.inflate(R.layout.activities_message_item, viewGroup, false)
                 TYPE_VOTE -> inflater.inflate(R.layout.activities_vote_item, viewGroup, false)
+                TYPE_SETTINGS -> inflater.inflate(R.layout.settings_item, viewGroup, false)
                 else -> View(activity!!)//пустая вьюшка (на всякий пожарный)
             }
             return ActivityHolder(view)
         }
 
         override fun getItemCount(): Int {
-            return mActivities.size
+            return mActivities.size+1
         }
 
         override fun onBindViewHolder(holder: ActivityHolder, pos: Int) {
-            when (mActivities[pos].type){
-                ActivitiesData.MESSAGES -> holder.bindMessages(mActivities[pos], mData[pos] as EventData)
-                ActivitiesData.VOTE -> holder.bindVote(mActivities[pos], mData[pos] as VotingData)
+            if (pos==0){
+                holder.bindSettings()
+                return
+            }
+            val position = pos-1
+            when (mActivities[position].type){
+                ActivitiesData.MESSAGES -> holder.bindMessages(mActivities[position], mData[position] as EventData)
+                ActivitiesData.VOTE -> holder.bindVote(mActivities[position], mData[position] as VotingData)
             }
         }
 
         override fun getItemViewType(position: Int): Int {
-            when (mActivities[position].type){
+            if (position==0) return TYPE_SETTINGS
+            when (mActivities[position-1].type){
                 ActivitiesData.VOTE -> return TYPE_VOTE
                 ActivitiesData.MESSAGES -> return TYPE_MESSAGES
             }

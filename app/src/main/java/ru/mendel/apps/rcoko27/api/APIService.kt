@@ -18,7 +18,7 @@ interface APIService {
     fun regCode(@Body req: RegCodeRequest): Call<RegResponse>
 
     @POST("registration.php")
-    fun registration(@Body req: RegistrationRequest): Call<RegResponse>
+    fun registration(@Header("token") token:String, @Body req: RegistrationRequest): Call<RegResponse>
 
     @POST("registration.php")
     fun autoLogin(@Header("token") token:String,  @Body req: AutoLoginRequest): Call<RegResponse>

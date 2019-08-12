@@ -18,6 +18,7 @@ import ru.mendel.apps.rcoko27.data.ActionData
 import ru.mendel.apps.rcoko27.json.JsonSchema
 import ru.mendel.apps.rcoko27.reactive.ActionDataObserver
 import ru.mendel.apps.rcoko27.reactive.ReactiveSubject
+import java.util.*
 
 class RegRoleFragment : AbstractAuthFragment() {
 
@@ -123,8 +124,10 @@ class RegRoleFragment : AbstractAuthFragment() {
             R.id.chip_worker -> 2
             else -> -1
         }
-
+        val token = UUID.randomUUID().toString()
+        QueryPreference.setToken(activity!!, token)
         APIHelper.sendRegistration(appname = activity!!.packageName,
+            token = token,
             email = mEmail,
             name = mName,
             code = mCode,

@@ -12,7 +12,7 @@ object QueryPreference {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(PREF_LOGIN, null)
     }
 
-    fun setLogin(context: Context, query: String){
+    fun setLogin(context: Context, query: String?){
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .putString(PREF_LOGIN, query)
@@ -23,7 +23,7 @@ object QueryPreference {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(PREF_PASSWORD, null)
     }
 
-    fun setPassword(context: Context, query: String){
+    fun setPassword(context: Context, query: String?){
         PreferenceManager.getDefaultSharedPreferences(context)
             .edit()
             .putString(PREF_PASSWORD, query)
