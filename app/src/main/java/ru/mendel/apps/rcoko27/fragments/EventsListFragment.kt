@@ -54,7 +54,7 @@ class EventsListFragment : BaseEventFragment() {
         val response = message as GetDataResponse
         val start = mList.size
         mIsStartLoad = false
-        if (response.data.size==0 || response.data.size<SIZE){
+        if (response.data.size==0){
             if (mAdapter.itemCount>mList.size){
                 mIsEnd = true
                 mAdapter.notifyItemRemoved(mList.size)
@@ -64,6 +64,9 @@ class EventsListFragment : BaseEventFragment() {
         }
         for (event in response.data) {
             mList.add(event)
+        }
+        if (response.data.size<SIZE){
+            mIsEnd = true
         }
 
         mUiHandler.post {
