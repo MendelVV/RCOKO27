@@ -17,7 +17,9 @@ import ru.mendel.apps.rcoko27.QueryPreference
 import ru.mendel.apps.rcoko27.R
 import ru.mendel.apps.rcoko27.activities.AuthActivity
 import ru.mendel.apps.rcoko27.activities.EventActivity
+import ru.mendel.apps.rcoko27.activities.SettingsActivity
 import ru.mendel.apps.rcoko27.api.APIHelper
+import ru.mendel.apps.rcoko27.api.requests.BaseRequest
 import ru.mendel.apps.rcoko27.api.responses.ActivitiesResponse
 import ru.mendel.apps.rcoko27.api.responses.BaseResponse
 import ru.mendel.apps.rcoko27.data.ActivitiesData
@@ -91,7 +93,7 @@ class ActivitiesFragment : BaseEventFragment() {
 
     override fun subscribe(){
         val observerGetActivities = ResponseObserver{x->receiveActivities(x)}
-        ReactiveSubject.addSubscribe(observerGetActivities, APIHelper.ACTION_GET_ACTIVITIES)
+        ReactiveSubject.addSubscribe(observerGetActivities, BaseRequest.ACTION_GET_ACTIVITIES)
         mObservers.add(observerGetActivities)
     }
 
@@ -164,7 +166,8 @@ class ActivitiesFragment : BaseEventFragment() {
         }
 
         private fun settings(){
-
+            val intent = Intent(activity!!,SettingsActivity::class.java)
+            startActivity(intent)
         }
 
     }

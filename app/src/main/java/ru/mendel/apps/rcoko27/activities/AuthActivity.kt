@@ -1,7 +1,9 @@
 package ru.mendel.apps.rcoko27.activities
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import ru.mendel.apps.rcoko27.QueryPreference
 import ru.mendel.apps.rcoko27.R
 import ru.mendel.apps.rcoko27.fragments.auth.AutoLoginFragment
@@ -32,5 +34,9 @@ class AuthActivity : AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)*/
 
+//        val intent = Intent(this@AuthActivity, TestNetworkActivity::class.java)
+//        startActivity(intent)
+
     }
+
 }

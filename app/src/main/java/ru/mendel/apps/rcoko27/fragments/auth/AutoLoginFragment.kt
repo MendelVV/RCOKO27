@@ -41,6 +41,10 @@ class AutoLoginFragment : AbstractAuthFragment(){
                         noNetwork()
                         showMessage(R.string.not_connection)
                     }
+                    "format" ->{
+                        noNetwork()
+                        showMessage(R.string.format_error)
+                    }
                     else -> {
                         noNetwork()
                         showMessage(R.string.unknow_error)

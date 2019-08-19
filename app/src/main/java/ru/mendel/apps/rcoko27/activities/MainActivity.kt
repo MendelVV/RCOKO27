@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.mendel.apps.rcoko27.R
 import ru.mendel.apps.rcoko27.data.MessageData
@@ -68,4 +69,5 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
 }

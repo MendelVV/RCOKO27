@@ -17,6 +17,7 @@ import ru.mendel.apps.rcoko27.*
 import ru.mendel.apps.rcoko27.activities.EventActivity
 import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.api.RcokoClient
+import ru.mendel.apps.rcoko27.api.requests.BaseRequest
 import ru.mendel.apps.rcoko27.api.requests.GetDataRequest
 import ru.mendel.apps.rcoko27.api.requests.UpdateEventsRequest
 import ru.mendel.apps.rcoko27.api.responses.BaseResponse
@@ -49,11 +50,11 @@ class EventsListFragment : BaseEventFragment() {
     }
 
     private fun getEvents(message: BaseResponse){
-        Log.d("MyTag", "action=${APIHelper.ACTION_GET_EVENTS}")
+        Log.d("MyTag", "action=${BaseRequest.ACTION_GET_EVENTS}")
         val response = message as GetDataResponse
         val start = mList.size
         mIsStartLoad = false
-        if (response.data.size==0){
+        if (response.data.size==0 || response.data.size<SIZE){
             if (mAdapter.itemCount>mList.size){
                 mIsEnd = true
                 mAdapter.notifyItemRemoved(mList.size)
@@ -76,7 +77,7 @@ class EventsListFragment : BaseEventFragment() {
     }
 
     private fun refreshEvents(message: BaseResponse){
-        Log.d("MyTag", "action=${APIHelper.ACTION_REFRESH_EVENTS}")
+        Log.d("MyTag", "action=${BaseRequest.ACTION_REFRESH_EVENTS}")
         val response = message as GetDataResponse
         mList.clear()
         for (event in response.data) {
@@ -95,7 +96,7 @@ class EventsListFragment : BaseEventFragment() {
     }
 
     private fun updateEvents(message: BaseResponse){
-        Log.d("MyTag", "action=${APIHelper.ACTION_UPDATE_EVENTS}")
+        Log.d("MyTag", "action=${BaseRequest.ACTION_UPDATE_EVENTS}")
         val response = message as UpdateEventsResponse
         var last = 0
         for (event in response.events){
@@ -142,15 +143,15 @@ class EventsListFragment : BaseEventFragment() {
 
     override fun subscribe(){
         val observerGetEvent = ResponseObserver{x->getEvents(x)}
-        ReactiveSubject.addSubscribe(observerGetEvent, APIHelper.ACTION_GET_EVENTS)
+        ReactiveSubject.addSubscribe(observerGetEvent, BaseRequest.ACTION_GET_EVENTS)
         mObservers.add(observerGetEvent)
 
         val observerRefreshEvents = ResponseObserver{x->refreshEvents(x)}
-        ReactiveSubject.addSubscribe(observerRefreshEvents, APIHelper.ACTION_REFRESH_EVENTS)
+        ReactiveSubject.addSubscribe(observerRefreshEvents, BaseRequest.ACTION_REFRESH_EVENTS)
         mObservers.add(observerRefreshEvents)
 
         val observerUpdateEvents = ResponseObserver{x->updateEvents(x)}
-        ReactiveSubject.addSubscribe(observerUpdateEvents, APIHelper.ACTION_UPDATE_EVENTS)
+        ReactiveSubject.addSubscribe(observerUpdateEvents, BaseRequest.ACTION_UPDATE_EVENTS)
         mObservers.add(observerUpdateEvents)
 
     }

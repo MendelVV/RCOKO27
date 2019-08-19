@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.event_pager_fragment.view.*
 import ru.mendel.apps.rcoko27.*
 import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.api.RcokoClient
+import ru.mendel.apps.rcoko27.api.requests.BaseRequest
 import ru.mendel.apps.rcoko27.api.requests.GetEventRequest
 import ru.mendel.apps.rcoko27.api.responses.BaseResponse
 import ru.mendel.apps.rcoko27.api.responses.GetEventResponse
@@ -78,7 +79,7 @@ class EventPagerFragment : BaseEventFragment() {
 
     override fun subscribe() {
         val observerGetEvent = ResponseObserver{ x->getEvent(x)}
-        ReactiveSubject.addSubscribe(observerGetEvent, APIHelper.ACTION_GET_EVENT)
+        ReactiveSubject.addSubscribe(observerGetEvent, BaseRequest.ACTION_GET_EVENT)
         mObservers.add(observerGetEvent)
     }
 

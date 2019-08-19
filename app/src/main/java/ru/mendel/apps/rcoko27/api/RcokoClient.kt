@@ -1,6 +1,7 @@
 package ru.mendel.apps.rcoko27.api
 
 import android.util.Log
+import com.google.gson.stream.MalformedJsonException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,11 +16,11 @@ import java.net.SocketTimeoutException
 
 object RcokoClient {
     //класс отправляющий запросы на сервер и получающий ответы
-    const val IMAGE_URL = "http://192.168.43.14/feedback/resources/"
-    private const val BASE_URL = "http://192.168.43.14/feedback/api/"
+//    const val IMAGE_URL = "http://192.168.43.14/feedback/resources/"
+//    private const val BASE_URL = "http://192.168.43.14/feedback/api/"
 
-//    const val IMAGE_URL = "http://feedback.rcoko27.ru/feedback/resources/"
-//    private const val BASE_URL = "http://feedback.rcoko27.ru/feedback/api/"
+    const val IMAGE_URL = "http://feedback.rcoko27.ru/feedback/resources/"
+    private const val BASE_URL = "http://feedback.rcoko27.ru/feedback/api/"
 
 //    const val IMAGE_URL = "http://10.0.0.74/feedback/resources/"
 //    private const val BASE_URL = "http://10.0.0.74/feedback/api/"
@@ -118,9 +119,69 @@ object RcokoClient {
         )
     }
 
+    fun resetPassword(request: ResetPasswordRequest){
+        service.resetPassword(request).enqueue(
+            object : Callback<RegResponse> {
+
+                override fun onResponse(call: Call<RegResponse>, response: Response<RegResponse>) {
+                    try {
+                        val res = response.body()!!
+                        when {
+                            res.result=="empty" ->{}
+                            res.result=="ok" -> {
+                                val action = ActionData(ActionData.ACTION_TO_NEXT)
+                                ReactiveSubject.next(action)
+                            }
+                            res.result=="error" -> baseError(res)
+                            else -> unknownError()
+                        }
+
+                    }catch (e: NullPointerException){
+                        verifyError(e)
+                    }
+                }
+
+                override fun onFailure(call: Call<RegResponse>, t: Throwable) {
+                    verifyError(t)
+                }
+            }
+        )
+    }
+
     fun autoLogin(request: AutoLoginRequest, token: String){
 //        service.autoLogin(request).enqueue(
         service.autoLogin(token, request).enqueue(
+            object : Callback<RegResponse> {
+
+                override fun onResponse(call: Call<RegResponse>, response: Response<RegResponse>) {
+                    try {
+                        val res = response.body()!!
+                        when {
+                            res.result == "empty" -> {
+                            }
+                            res.result == "ok" -> {
+                                val action = ActionData(ActionData.ACTION_TO_MAIN)
+                                ReactiveSubject.next(action)
+                            }
+                            res.result == "error" -> baseError(res)
+                            else -> unknownError()
+                        }
+                    }catch (e: NullPointerException){
+                        verifyError(e)
+                    }
+                }
+
+                override fun onFailure(call: Call<RegResponse>, t: Throwable) {
+                    verifyError(t)
+                }
+
+            }
+        )
+    }
+
+    fun newPassword(request: NewPasswordRequest, token: String){
+//        service.autoLogin(request).enqueue(
+        service.newPassword(token, request).enqueue(
             object : Callback<RegResponse> {
 
                 override fun onResponse(call: Call<RegResponse>, response: Response<RegResponse>) {
@@ -340,7 +401,58 @@ object RcokoClient {
                 }
 
                 override fun onFailure(call: Call<UpdateMessagesResponse>, t: Throwable) {
-//                    Log.i("MyTag","updateMessages")
+                    verifyError(t)
+                }
+
+            }
+        )
+    }
+
+    fun getSettings(request: GetSettingsRequest, token:String){
+        service.getSettings(token, request).enqueue(
+            object : Callback<GetSettingsResponse> {
+
+                override fun onResponse(call: Call<GetSettingsResponse>, response: Response<GetSettingsResponse>) {
+                    try{
+                        val res = response.body()!!
+                        when {
+                            res.result=="empty" ->{}
+                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
+                            res.result=="error" -> baseError(res)
+                            else -> unknownError()
+                        }
+                    }catch (e: NullPointerException){
+                        verifyError(e)
+                    }
+                }
+
+                override fun onFailure(call: Call<GetSettingsResponse>, t: Throwable) {
+                    verifyError(t)
+                }
+
+            }
+        )
+    }
+
+    fun editSettings(request: EditSettingsRequest, token:String){
+        service.editSettings(token, request).enqueue(
+            object : Callback<EditSettingsResponse> {
+
+                override fun onResponse(call: Call<EditSettingsResponse>, response: Response<EditSettingsResponse>) {
+                    try{
+                        val res = response.body()!!
+                        when {
+                            res.result=="empty" ->{}
+                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
+                            res.result=="error" -> baseError(res)
+                            else -> unknownError()
+                        }
+                    }catch (e: NullPointerException){
+                        verifyError(e)
+                    }
+                }
+
+                override fun onFailure(call: Call<EditSettingsResponse>, t: Throwable) {
                     verifyError(t)
                 }
 
@@ -356,12 +468,19 @@ object RcokoClient {
     }
 
     private fun verifyError(t: Throwable){
-        when (t){
+        Log.e("MyTag","error!",t)
+        when (t) {
             is ConnectException -> networkError()
             is SocketTimeoutException -> networkError()
+            is MalformedJsonException -> formatError()
             else -> unknownError()
         }
-        System.err.println(t)
+    }
+
+    private fun formatError(){
+        val action = ActionData(ActionData.ACTION_ERROR)
+        action.data[ActionData.ITEM_TYPE] = "format"
+        ReactiveSubject.next(action)
     }
 
     private fun networkError(){

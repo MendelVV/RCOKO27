@@ -15,6 +15,7 @@ import ru.mendel.apps.rcoko27.QueryPreference
 import ru.mendel.apps.rcoko27.R
 import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.api.RcokoClient
+import ru.mendel.apps.rcoko27.api.requests.BaseRequest
 import ru.mendel.apps.rcoko27.api.requests.VoteRequest
 import ru.mendel.apps.rcoko27.api.responses.BaseResponse
 import ru.mendel.apps.rcoko27.api.responses.VoteResponse
@@ -65,7 +66,7 @@ class EventVotingFragment : BaseEventFragment(){
 
     override fun subscribe() {
         val observerVote = ResponseObserver{x->actionVote(x)}
-        ReactiveSubject.addSubscribe(observerVote, APIHelper.ACTION_VOTE)
+        ReactiveSubject.addSubscribe(observerVote, BaseRequest.ACTION_VOTE)
         mObservers.add(observerVote)
     }
 

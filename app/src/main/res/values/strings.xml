@@ -6,6 +6,7 @@
     <string name="rcoko">РЦОКО</string>
     <string name="input_code_from_email">Код полученный на e-mail</string>
     <string name="need_specify_data">Нужно указать e-mail и имя</string>
+    <string name="need_specify_email">Нужно указать e-mail</string>
     <string name="need_specify_auth_data">Нужно указать e-mail и пароль</string>
     <string name="contains_email">Такой e-mail уже зарегистрирован</string>
     <string name="unknow_error">Что-то пошло не так</string>
@@ -41,6 +42,13 @@
     <string name="message_info">Вы учавствовали в обсуждении этой новости (отправили %s)</string>
     <string name="exit">Выйти</string>
     <string name="view">Просмотр</string>
+    <string name="format_error">Ошибка формата ответа</string>
+    <string name="text_of_message">Текст сообщения</string>
+    <string name="reset_the_password"><u>Сбросить пароль</u></string>
+    <string name="reset_password">Сброс пароля</string>
+    <string name="showed_name">Отображаемое имя</string>
+    <string name="save">Сохранить</string>
+    <string name="settings">Настройки</string>
 
     <plurals name="pl_messages">
         <item quantity="zero">сообщений</item>

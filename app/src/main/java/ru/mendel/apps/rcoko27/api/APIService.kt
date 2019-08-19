@@ -18,6 +18,12 @@ interface APIService {
     fun regCode(@Body req: RegCodeRequest): Call<RegResponse>
 
     @POST("registration.php")
+    fun resetPassword(@Body req: ResetPasswordRequest): Call<RegResponse>
+
+    @POST("registration.php")
+    fun newPassword(@Header("token") token:String, @Body req: NewPasswordRequest): Call<RegResponse>
+
+    @POST("registration.php")
     fun registration(@Header("token") token:String, @Body req: RegistrationRequest): Call<RegResponse>
 
     @POST("registration.php")
@@ -40,6 +46,12 @@ interface APIService {
 
     @POST("get_data.php")
     fun updateMessages(@Header("token") token:String, @Body req: UpdateMessagesRequest): Call<UpdateMessagesResponse>
+
+    @POST("get_data.php")
+    fun getSettings(@Header("token") token:String, @Body req: GetSettingsRequest): Call<GetSettingsResponse>
+
+    @POST("get_data.php")
+    fun editSettings(@Header("token") token:String, @Body req: EditSettingsRequest): Call<EditSettingsResponse>
 
     @POST("activities.php")
     fun getActivities(@Header("token") token:String, @Body req: ActivitiesRequest) : Call<ActivitiesResponse>

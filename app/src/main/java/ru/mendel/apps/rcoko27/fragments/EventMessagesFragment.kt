@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.message_item.view.*
 import ru.mendel.apps.rcoko27.*
 import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.api.RcokoClient
+import ru.mendel.apps.rcoko27.api.requests.BaseRequest
 import ru.mendel.apps.rcoko27.api.requests.SendMessageRequest
 import ru.mendel.apps.rcoko27.api.requests.UpdateMessagesRequest
 import ru.mendel.apps.rcoko27.api.responses.BaseResponse
@@ -136,11 +137,11 @@ class EventMessagesFragment : BaseEventFragment() {
 
     override fun subscribe() {
         val observerSendMessage = ResponseObserver{x->actionSendMessage(x)}
-        ReactiveSubject.addSubscribe(observerSendMessage, APIHelper.ACTION_SEND_MESSAGE)
+        ReactiveSubject.addSubscribe(observerSendMessage, BaseRequest.ACTION_SEND_MESSAGE)
         mObservers.add(observerSendMessage)
 
         val observerUpdateMessage = ResponseObserver{x->actionUpdateMessage(x)}
-        ReactiveSubject.addSubscribe(observerUpdateMessage, APIHelper.ACTION_UPDATE_MESSAGES)
+        ReactiveSubject.addSubscribe(observerUpdateMessage, BaseRequest.ACTION_UPDATE_MESSAGES)
         mObservers.add(observerUpdateMessage)
 
     }

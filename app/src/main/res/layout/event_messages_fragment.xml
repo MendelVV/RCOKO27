@@ -27,6 +27,7 @@
                 android:id="@+id/message_text"
                 android:layout_width="0dp"
                 android:layout_weight="1"
+                android:hint="@string/text_of_message"
                 android:maxLines="3"
                 android:inputType="textCapSentences|textMultiLine"
                 android:textSize="@dimen/text16"

@@ -1,145 +1,113 @@
 package ru.mendel.apps.rcoko27.api
 
-import kotlinx.android.synthetic.main.reg_fragment.view.*
 import ru.mendel.apps.rcoko27.api.requests.*
-import ru.mendel.apps.rcoko27.fragments.EventsListFragment
 
 object APIHelper {
 
-    const val ACTION_AUTH = "auth"
-    const val ACTION_REG = "reg"
-    const val ACTION_VERIFY_CODE = "verify_code"
-    const val ACTION_REGISTRATION = "registration"
-
-    const val ACTION_GET_EVENTS = "get_events"
-    const val ACTION_REFRESH_EVENTS = "refresh_events"
-    const val ACTION_UPDATE_EVENTS = "update_events"
-
-    const val ACTION_GET_EVENT = "get_event"
-
-    const val ACTION_SEND_MESSAGE = "send_message"
-    const val ACTION_UPDATE_MESSAGES = "update_messages"
-
-    const val ACTION_VOTE = "vote"
-
-    const val ACTION_GET_ACTIVITIES = "get_activities"
-
     fun sendAutoLogin(appname:String, email:String, password:String, token: String){
-        val request = AutoLoginRequest()
+        val request = AutoLoginRequest(email=email,
+            password = password)
         request.appname = appname
-        request.action = ACTION_AUTH
-        request.email = email
-        request.password = password
         RcokoClient.autoLogin(request, token)
     }
 
-    fun sendReg(appname:String, email:String,name:String){
-        val request = RegRequest()
+    fun sendReg(appname:String, email:String, name:String){
+        val request = RegRequest(email = email,
+            name = name)
         request.appname = appname
-        request.action = ACTION_REG
-        request.email = email
-        request.name = name
         RcokoClient.reg(request)
     }
 
     fun sendRegCode(appname:String, email:String,code:String){
-        val request = RegCodeRequest()
+        val request = RegCodeRequest(email = email, code = code)
         request.appname = appname
-        request.action = ACTION_VERIFY_CODE
-        request.email = email
-        request.code = code
-
         RcokoClient.regCode(request)
     }
 
-    fun sendRegistration(appname:String, token: String, email:String, name:String, code:String, password:String, role:Int){
-        val request = RegistrationRequest()
+    fun sendResetPassword(appname:String, email:String){
+        val request = ResetPasswordRequest(email = email)
         request.appname = appname
-        request.action = ACTION_REGISTRATION
-        request.email = email
-        request.name = name
-        request.code = code
-        request.password = password
-        request.role = role
+        RcokoClient.resetPassword(request)
+    }
 
+    fun newPassword(appname: String, token: String, email: String, code: String, password: String){
+        val request = NewPasswordRequest(email = email,
+            code = code,
+            password = password)
+        request.appname = appname
+        RcokoClient.newPassword(request, token)
+    }
+
+    fun sendRegistration(appname:String, token: String, email:String, name:String, code:String, password:String, role:Int){
+        val request = RegistrationRequest(email = email,
+            name = name,
+            code = code,
+            password = password,
+            role = role)
+        request.appname = appname
         RcokoClient.registration(request, token)
     }
 
     fun refreshEvents(appname:String, token: String, start:Int, size: Int){
-        val request = GetDataRequest()
+        val request = GetDataRequest(start = start, size = size, action = BaseRequest.ACTION_REFRESH_EVENTS)
         request.appname = appname
-        request.action = ACTION_REFRESH_EVENTS
-        request.start = start
-        request.size = size
         RcokoClient.getData(request, token)
     }
 
     fun getEvents(appname:String, token:String, start:Int, size: Int){
-        val request = GetDataRequest()
+        val request = GetDataRequest(start = start, size = size, action = BaseRequest.ACTION_GET_EVENTS)
         request.appname = appname
-        request.action = ACTION_GET_EVENTS
-        request.start = start
-        request.size = size
-
         RcokoClient.getData(request, token)
     }
 
     fun updateEvents(appname:String, token:String, start:String, end: String){
-        val request = UpdateEventsRequest()
+        val request = UpdateEventsRequest(start = start, end = end)
         request.appname = appname
-        request.action = ACTION_UPDATE_EVENTS
-        request.start = start//дата первого события
-        request.end = end//дата последнего события
-
         RcokoClient.updateEvents(request, token)
     }
 
     fun getEvent(appname:String, token:String, code:Int){
-        val request = GetEventRequest()
+        val request = GetEventRequest(code = code)
         request.appname = appname
-        request.action = ACTION_GET_EVENT
-        request.code = code
-
         RcokoClient.getEvent(request, token)
     }
 
     fun sendMessage(appname:String, token:String, parentmessage:Int,text:String,event:Int, uuid:String){
-        val request = SendMessageRequest()
+        val request = SendMessageRequest(parentmessage = parentmessage,
+            text = text,
+            event = event,
+            uuid = uuid)
         request.appname = appname
-        request.action = ACTION_SEND_MESSAGE
-        request.parentmessage = parentmessage
-        request.text = text
-        request.event = event
-        request.uuid = uuid
-
         RcokoClient.sendMessage(request, token)
     }
 
     fun updateMessages(appname:String, token:String, event:Int){
-        val request = UpdateMessagesRequest()
-
+        val request = UpdateMessagesRequest(event = event)
         request.appname = appname
-        request.action = ACTION_UPDATE_MESSAGES
-        request.event = event
-
         RcokoClient.updateMessages(request, token)
     }
 
     fun vote(appname:String, token:String, voting:Int,answer:Int){
-        val request = VoteRequest()
+        val request = VoteRequest(voting = voting, answer = answer)
         request.appname = appname
-        request.action = ACTION_VOTE
-        request.voting = voting
-        request.answer = answer
-
         RcokoClient.vote(request, token)
     }
 
     fun getActivities(appname:String, token:String){
         val request = ActivitiesRequest()
         request.appname = appname
-        request.action = ACTION_GET_ACTIVITIES
-
         RcokoClient.getActivities(request, token)
+    }
+
+    fun getSettings(appname:String, token:String){
+        val request = GetSettingsRequest()
+        request.appname = appname
+        RcokoClient.getSettings(request, token)
+    }
+
+    fun editSettings(appname:String, token:String, name: String, role: Int){
+        val request = EditSettingsRequest(name = name, role = role)
+        request.appname = appname
+        RcokoClient.editSettings(request, token)
     }
 }
