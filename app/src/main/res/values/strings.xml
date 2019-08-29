@@ -49,6 +49,7 @@
     <string name="showed_name">Отображаемое имя</string>
     <string name="save">Сохранить</string>
     <string name="settings">Настройки</string>
+    <string name="not_valid_email">Не корректный e-mail</string>
 
     <plurals name="pl_messages">
         <item quantity="zero">сообщений</item>

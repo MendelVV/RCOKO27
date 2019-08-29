@@ -19,8 +19,8 @@ object RcokoClient {
 //    const val IMAGE_URL = "http://192.168.43.14/feedback/resources/"
 //    private const val BASE_URL = "http://192.168.43.14/feedback/api/"
 
-    const val IMAGE_URL = "http://feedback.rcoko27.ru/feedback/resources/"
-    private const val BASE_URL = "http://feedback.rcoko27.ru/feedback/api/"
+    const val IMAGE_URL = "https://feedback.rcoko27.ru/feedback/resources/"
+    private const val BASE_URL = "https://feedback.rcoko27.ru/feedback/api/"
 
 //    const val IMAGE_URL = "http://10.0.0.74/feedback/resources/"
 //    private const val BASE_URL = "http://10.0.0.74/feedback/api/"

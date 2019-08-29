@@ -7,14 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.reg_fragment.view.*
-import org.json.JSONObject
 import ru.mendel.apps.rcoko27.*
 import ru.mendel.apps.rcoko27.api.APIHelper
-import ru.mendel.apps.rcoko27.api.RcokoClient
-import ru.mendel.apps.rcoko27.api.requests.RegRequest
-import ru.mendel.apps.rcoko27.async.BasicAsync
 import ru.mendel.apps.rcoko27.data.ActionData
-import ru.mendel.apps.rcoko27.json.JsonSchema
+import ru.mendel.apps.rcoko27.data.DataValidator
 import ru.mendel.apps.rcoko27.reactive.ActionDataObserver
 import ru.mendel.apps.rcoko27.reactive.ReactiveSubject
 
@@ -75,7 +71,13 @@ class RegFragment: AbstractAuthFragment(){
     }
 
     private fun check(){
-        if (view!!.text_email.text.toString()!="" && view!!.text_name.text.toString()!=""){
+        if (!DataValidator.isTrivialString(view!!.text_email.text.toString()) &&
+            !DataValidator.isTrivialString(view!!.text_name.text.toString())){
+            //проверяем валидный ли Email
+            if (!DataValidator.isValidEmail(view!!.text_email.text.toString())){
+                showMessage(R.string.not_valid_email)
+                return
+            }
             //отправляем данные на сервер
             APIHelper.sendReg(appname = activity!!.packageName,
                 email = view!!.text_email.text.toString(),

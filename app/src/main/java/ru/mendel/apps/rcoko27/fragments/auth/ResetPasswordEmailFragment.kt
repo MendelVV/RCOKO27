@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.reset_pass_email_fragment.view.*
 import ru.mendel.apps.rcoko27.*
 import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.data.ActionData
+import ru.mendel.apps.rcoko27.data.DataValidator
 import ru.mendel.apps.rcoko27.reactive.ActionDataObserver
 import ru.mendel.apps.rcoko27.reactive.ReactiveSubject
 
@@ -55,7 +56,11 @@ class ResetPasswordEmailFragment: AbstractAuthFragment(){
 
 
     private fun getCode(){
-        if (view!!.text_email.text.toString()!=""){
+        if (!DataValidator.isTrivialString(view!!.text_email.text.toString())){
+            if (!DataValidator.isValidEmail(view!!.text_email.text.toString())){
+                showMessage(R.string.not_valid_email)
+                return
+            }
             //отправляем данные на сервер
             APIHelper.sendResetPassword(appname = activity!!.packageName,
                 email = view!!.text_email.text.toString())

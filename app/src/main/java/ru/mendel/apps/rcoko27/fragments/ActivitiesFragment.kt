@@ -195,6 +195,7 @@ class ActivitiesFragment : BaseEventFragment() {
                 return
             }
             val position = pos-1
+            Log.d("MyTag","position=$position type=${mActivities[position].type} ")
             when (mActivities[position].type){
                 ActivitiesData.MESSAGES -> holder.bindMessages(mActivities[position], mData[position] as EventData)
                 ActivitiesData.VOTE -> holder.bindVote(mActivities[position], mData[position] as VotingData)
