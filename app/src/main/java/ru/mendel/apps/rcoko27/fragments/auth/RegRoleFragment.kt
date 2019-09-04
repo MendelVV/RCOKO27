@@ -50,7 +50,11 @@ class RegRoleFragment : AbstractAuthFragment() {
 
     private fun next(message: ActionData) {
         when (message.actionName) {
-            ActionData.ACTION_TO_MAIN -> toMain()
+            ActionData.ACTION_TO_MAIN -> {
+                val ver = message.data[ActionData.ITEM_VERIFICATION]?.toInt()?:0
+                QueryPreference.setVerification(activity!!, ver)
+                toMain()
+            }
             ActionData.ACTION_ERROR -> {
                 val type = message.data[ActionData.ITEM_TYPE]
 

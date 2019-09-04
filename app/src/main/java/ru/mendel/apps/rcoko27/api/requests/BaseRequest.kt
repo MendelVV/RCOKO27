@@ -18,6 +18,8 @@ open class BaseRequest(var action: String? =null) {
         const val ACTION_GET_EVENT = "get_event"
 
         const val ACTION_SEND_MESSAGE = "send_message"
+        const val ACTION_REMOVE_MESSAGE = "remove_message"
+        const val ACTION_EDIT_MESSAGE = "edit_message"
         const val ACTION_UPDATE_MESSAGES = "update_messages"
 
         const val ACTION_VOTE = "vote"

@@ -9,6 +9,7 @@ class ActionData(val actionName: String) {
         const val ACTION_ERROR="ACTION_ERROR"
 
         const val ITEM_TYPE = "ITEM_TYPE"
+        const val ITEM_VERIFICATION = "ITEM_VERIFICATION"
 
     }
 

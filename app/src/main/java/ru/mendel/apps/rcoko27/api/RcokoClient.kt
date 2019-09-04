@@ -16,11 +16,11 @@ import java.net.SocketTimeoutException
 
 object RcokoClient {
     //класс отправляющий запросы на сервер и получающий ответы
-//    const val IMAGE_URL = "http://192.168.43.14/feedback/resources/"
-//    private const val BASE_URL = "http://192.168.43.14/feedback/api/"
+    const val IMAGE_URL = "http://192.168.43.14/feedback/resources/"
+    private const val BASE_URL = "http://192.168.43.14/feedback/api/"
 
-    const val IMAGE_URL = "https://feedback.rcoko27.ru/feedback/resources/"
-    private const val BASE_URL = "https://feedback.rcoko27.ru/feedback/api/"
+//    const val IMAGE_URL = "https://feedback.rcoko27.ru/feedback/resources/"
+//    private const val BASE_URL = "https://feedback.rcoko27.ru/feedback/api/"
 
 //    const val IMAGE_URL = "http://10.0.0.74/feedback/resources/"
 //    private const val BASE_URL = "http://10.0.0.74/feedback/api/"
@@ -161,6 +161,7 @@ object RcokoClient {
                             }
                             res.result == "ok" -> {
                                 val action = ActionData(ActionData.ACTION_TO_MAIN)
+                                action.data[ActionData.ITEM_VERIFICATION] = res.verification.toString()
                                 ReactiveSubject.next(action)
                             }
                             res.result == "error" -> baseError(res)
@@ -192,6 +193,7 @@ object RcokoClient {
                             }
                             res.result == "ok" -> {
                                 val action = ActionData(ActionData.ACTION_TO_MAIN)
+                                action.data[ActionData.ITEM_VERIFICATION] = res.verification.toString()
                                 ReactiveSubject.next(action)
                             }
                             res.result == "error" -> baseError(res)
@@ -453,6 +455,32 @@ object RcokoClient {
                 }
 
                 override fun onFailure(call: Call<EditSettingsResponse>, t: Throwable) {
+                    verifyError(t)
+                }
+
+            }
+        )
+    }
+
+    fun removeMessage(request: RemoveMessageRequest, token:String){
+        service.removeMessage(token, request).enqueue(
+            object : Callback<RemoveMessageResponse> {
+
+                override fun onResponse(call: Call<RemoveMessageResponse>, response: Response<RemoveMessageResponse>) {
+                    try{
+                        val res = response.body()!!
+                        when {
+                            res.result=="empty" ->{}
+                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
+                            res.result=="error" -> baseError(res)
+                            else -> unknownError()
+                        }
+                    }catch (e: NullPointerException){
+                        verifyError(e)
+                    }
+                }
+
+                override fun onFailure(call: Call<RemoveMessageResponse>, t: Throwable) {
                     verifyError(t)
                 }
 

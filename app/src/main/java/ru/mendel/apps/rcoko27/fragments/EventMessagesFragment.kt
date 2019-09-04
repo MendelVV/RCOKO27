@@ -1,9 +1,11 @@
 package ru.mendel.apps.rcoko27.fragments
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.*
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -22,6 +24,7 @@ import ru.mendel.apps.rcoko27.api.requests.BaseRequest
 import ru.mendel.apps.rcoko27.api.requests.SendMessageRequest
 import ru.mendel.apps.rcoko27.api.requests.UpdateMessagesRequest
 import ru.mendel.apps.rcoko27.api.responses.BaseResponse
+import ru.mendel.apps.rcoko27.api.responses.RemoveMessageResponse
 import ru.mendel.apps.rcoko27.api.responses.SendMessageResponse
 import ru.mendel.apps.rcoko27.api.responses.UpdateMessagesResponse
 import ru.mendel.apps.rcoko27.data.EventData
@@ -68,6 +71,15 @@ class EventMessagesFragment : BaseEventFragment() {
         }else{
             Log.e("MyTag","not find message")
         }
+    }
+
+    private fun actionRemoveMessage(message: BaseResponse){
+        val response = message as RemoveMessageResponse
+        //берем теперь id сообщения которое нужно удалить
+        val messageData = findMessage(response.uuid!!)
+        val pos = mMessages.indexOf(messageData)
+        mMessages.removeAt(pos)
+        mUiHandler.post { mAdapter!!.notifyItemRemoved(pos) }
     }
 
     private fun actionUpdateMessage(message: BaseResponse){
@@ -144,6 +156,9 @@ class EventMessagesFragment : BaseEventFragment() {
         ReactiveSubject.addSubscribe(observerUpdateMessage, BaseRequest.ACTION_UPDATE_MESSAGES)
         mObservers.add(observerUpdateMessage)
 
+        val observerRemoveMessage = ResponseObserver{x->actionRemoveMessage(x)}
+        ReactiveSubject.addSubscribe(observerRemoveMessage, BaseRequest.ACTION_REMOVE_MESSAGE)
+        mObservers.add(observerRemoveMessage)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -234,6 +249,11 @@ class EventMessagesFragment : BaseEventFragment() {
                 }else{
                     itemView.image_state.setImageResource(R.drawable.ic_delivered_message)
                 }
+                //свое сообщение
+                itemView.setOnLongClickListener {
+                    showMenu()
+                    return@setOnLongClickListener true
+                }
             }else{
                 itemView.text_external_author.text = mMessageData!!.authorname
 
@@ -260,6 +280,42 @@ class EventMessagesFragment : BaseEventFragment() {
                     .error(R.drawable.rcoko27)
                     .into(itemView.event_image)
             }
+        }
+
+        private fun showMenu(){
+            //показываем меню в зависимости от того какой пользователь
+            val ver = QueryPreference.getVerification(activity!!)
+            val arr = if (ver==0){
+                R.array.actions_delete
+            }else{
+                R.array.actions_delete_edit
+            }
+            val ad = AlertDialog.Builder(activity!!)
+            ad.setItems(arr) { d: DialogInterface, n:Int ->
+                if (ver==0){
+                    when(n){
+                        0->removeMessage()
+                    }
+                }else{
+                    when(n){
+                        0->editMessage()
+                        1->removeMessage()
+                    }
+                }
+                d.dismiss()}
+            ad.show()
+        }
+
+        private fun removeMessage(){
+            //собираем сообщение на удаление сообщения
+
+            APIHelper.removeMessage(appname = activity!!.packageName,
+                token = QueryPreference.getToken(activity!!)!!,
+                uuid = mMessageData!!.uuid.toString()!!)
+        }
+
+        private fun editMessage(){
+            //TODO edit message
         }
 
     }

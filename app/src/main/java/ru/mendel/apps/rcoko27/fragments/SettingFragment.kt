@@ -90,6 +90,13 @@ class SettingFragment : BaseEventFragment() {
 
         view.button_save.setOnClickListener { save() }
 
+        val ver = QueryPreference.getVerification(activity!!)
+        if (ver==1){
+            view.image_verification.visibility = View.VISIBLE
+        }else{
+            view.image_verification.visibility = View.GONE
+        }
+
         return view
     }
 

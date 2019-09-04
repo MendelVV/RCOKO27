@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
+import ru.mendel.apps.rcoko27.QueryPreference
 import ru.mendel.apps.rcoko27.R
 import ru.mendel.apps.rcoko27.data.MessageData
 import ru.mendel.apps.rcoko27.fragments.ActivitiesFragment
@@ -21,7 +22,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        val ver = QueryPreference.getVerification(this)
+        Log.d("MyTag","ver=$ver")
         setBottomMenu()
         mCurrentFragment = EventsListFragment()
         supportFragmentManager.beginTransaction().replace(R.id.fragment_layout, mCurrentFragment).commit()

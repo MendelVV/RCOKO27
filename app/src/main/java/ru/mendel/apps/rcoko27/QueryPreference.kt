@@ -7,6 +7,7 @@ object QueryPreference {
     private const val PREF_LOGIN = "login"
     private const val PREF_PASSWORD = "password"
     private const val PREF_TOKEN = "token"
+    private const val PREF_VERIFICATION = "verification"
 
     fun getLogin(context: Context): String?{
         return PreferenceManager.getDefaultSharedPreferences(context).getString(PREF_LOGIN, null)
@@ -38,6 +39,17 @@ object QueryPreference {
         PreferenceManager.getDefaultSharedPreferences(context)
             .edit()
             .putString(PREF_TOKEN, query)
+            .apply()
+    }
+
+    fun getVerification(context: Context): Int{
+        return PreferenceManager.getDefaultSharedPreferences(context).getInt(PREF_VERIFICATION, 0)
+    }
+
+    fun setVerification(context: Context, query: Int){
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit()
+            .putInt(PREF_VERIFICATION, query)
             .apply()
     }
 

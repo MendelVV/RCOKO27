@@ -110,4 +110,10 @@ object APIHelper {
         request.appname = appname
         RcokoClient.editSettings(request, token)
     }
+
+    fun removeMessage(appname:String, token:String, uuid: String){
+        val request = RemoveMessageRequest(uuid = uuid)
+        request.appname = appname
+        RcokoClient.removeMessage(request, token)
+    }
 }

@@ -59,4 +59,13 @@
         <item quantity="many">%d сообщений</item>
         <item quantity="other">%d сообщений</item>
     </plurals>
+
+    <string-array name="actions_delete">
+        <item>Удалить</item>
+    </string-array>
+
+    <string-array name="actions_delete_edit">
+        <item>Изменить</item>
+        <item>Удалить</item>
+    </string-array>
 </resources>
