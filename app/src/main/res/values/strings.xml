@@ -50,6 +50,10 @@
     <string name="save">Сохранить</string>
     <string name="settings">Настройки</string>
     <string name="not_valid_email">Не корректный e-mail</string>
+    <string name="edited_text">Измененный текст</string>
+    <string name="edit_text">Редактирование сообщения</string>
+    <string name="edit">Изменить</string>
+    <string name="cancel">Отмена</string>
 
     <plurals name="pl_messages">
         <item quantity="zero">сообщений</item>

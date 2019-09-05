@@ -292,6 +292,7 @@ class RcokoDatabase(context: Context) {
             cv.put(TableMessages.Cols.TEXT,message.text)
             cv.put(TableMessages.Cols.UUID,message.uuid)
             cv.put(TableMessages.Cols.STATE,message.state)
+            cv.put(TableMessages.Cols.VERIFICATION, message.verification)
             val date = if (message.date!=null && message.date!="none"){
                 MessageData.convertData(message.date!!,message.gmt!!)
             }else{

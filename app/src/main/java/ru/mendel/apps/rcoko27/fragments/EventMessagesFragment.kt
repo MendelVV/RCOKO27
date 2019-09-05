@@ -23,13 +23,11 @@ import ru.mendel.apps.rcoko27.api.RcokoClient
 import ru.mendel.apps.rcoko27.api.requests.BaseRequest
 import ru.mendel.apps.rcoko27.api.requests.SendMessageRequest
 import ru.mendel.apps.rcoko27.api.requests.UpdateMessagesRequest
-import ru.mendel.apps.rcoko27.api.responses.BaseResponse
-import ru.mendel.apps.rcoko27.api.responses.RemoveMessageResponse
-import ru.mendel.apps.rcoko27.api.responses.SendMessageResponse
-import ru.mendel.apps.rcoko27.api.responses.UpdateMessagesResponse
+import ru.mendel.apps.rcoko27.api.responses.*
 import ru.mendel.apps.rcoko27.data.EventData
 import ru.mendel.apps.rcoko27.data.MessageData
 import ru.mendel.apps.rcoko27.database.RcokoDatabase
+import ru.mendel.apps.rcoko27.dialogs.EditMessageDialog
 import ru.mendel.apps.rcoko27.reactive.ReactiveSubject
 import ru.mendel.apps.rcoko27.reactive.ResponseObserver
 import java.util.*
@@ -79,7 +77,16 @@ class EventMessagesFragment : BaseEventFragment() {
         val messageData = findMessage(response.uuid!!)
         val pos = mMessages.indexOf(messageData)
         mMessages.removeAt(pos)
-        mUiHandler.post { mAdapter!!.notifyItemRemoved(pos) }
+        mUiHandler.post { mAdapter!!.notifyItemRemoved(pos+1) }
+    }
+
+    private fun actionEditMessage(message: BaseResponse){
+        val response = message as EditMessageResponse
+        val messageData = findMessage(response.uuid!!)
+        val pos = mMessages.indexOf(messageData)
+        messageData!!.text=response.text
+        Log.d("MyTag","update pos=$pos text=${response.text}")
+        mUiHandler.post { mAdapter!!.notifyItemChanged(pos+1) }
     }
 
     private fun actionUpdateMessage(message: BaseResponse){
@@ -97,7 +104,6 @@ class EventMessagesFragment : BaseEventFragment() {
                     if (message.uuid==mMessages[j].uuid){
                         find = true
                         i=j
-//                        Log.d("MyTag","find ${message.text} i=$j")
                         if (mMessages[j].state!=MessageData.STATE_DELIVERED){
                             mMessages[j].state=MessageData.STATE_DELIVERED
                             mUiHandler.post { mAdapter!!.notifyItemChanged(i) }
@@ -159,6 +165,10 @@ class EventMessagesFragment : BaseEventFragment() {
         val observerRemoveMessage = ResponseObserver{x->actionRemoveMessage(x)}
         ReactiveSubject.addSubscribe(observerRemoveMessage, BaseRequest.ACTION_REMOVE_MESSAGE)
         mObservers.add(observerRemoveMessage)
+
+        val observerEditMessage = ResponseObserver{x->actionEditMessage(x)}
+        ReactiveSubject.addSubscribe(observerEditMessage, BaseRequest.ACTION_EDIT_MESSAGE)
+        mObservers.add(observerEditMessage)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -261,6 +271,13 @@ class EventMessagesFragment : BaseEventFragment() {
 
                 itemView.text_external_message.text = mMessageData!!.text
                 itemView.text_external_time.text = mMessageData!!.date
+
+                if (mMessageData!!.verification==1){
+                    itemView.view_external_verification.visibility=View.VISIBLE
+                }else{
+                    itemView.view_external_verification.visibility=View.GONE
+                }
+
             }
 
         }
@@ -315,7 +332,10 @@ class EventMessagesFragment : BaseEventFragment() {
         }
 
         private fun editMessage(){
-            //TODO edit message
+            //показываем диалог редактирования сообщения
+            val dialog = EditMessageDialog.newInstance(mMessageData!!.uuid!!, mMessageData!!.text!!)
+//            dialog.setTargetFragment(this@EncryptListFragment, REQUEST_ADD_EMPTY)
+            dialog.show(fragmentManager,"edit message")
         }
 
     }

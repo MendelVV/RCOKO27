@@ -64,6 +64,7 @@ public class RcokoDbSchema {
             public static final String TEXT = "text";
             public static final String UUID = "uuid";
             public static final String STATE = "state";
+            public static final String VERIFICATION = "verification";
 
         }
     }

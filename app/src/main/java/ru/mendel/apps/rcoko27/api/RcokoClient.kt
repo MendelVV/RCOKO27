@@ -16,11 +16,11 @@ import java.net.SocketTimeoutException
 
 object RcokoClient {
     //класс отправляющий запросы на сервер и получающий ответы
-    const val IMAGE_URL = "http://192.168.43.14/feedback/resources/"
-    private const val BASE_URL = "http://192.168.43.14/feedback/api/"
+//    const val IMAGE_URL = "http://192.168.43.14/feedback/resources/"
+//    private const val BASE_URL = "http://192.168.43.14/feedback/api/"
 
-//    const val IMAGE_URL = "https://feedback.rcoko27.ru/feedback/resources/"
-//    private const val BASE_URL = "https://feedback.rcoko27.ru/feedback/api/"
+    const val IMAGE_URL = "https://feedback.rcoko27.ru/feedback/resources/"
+    private const val BASE_URL = "https://feedback.rcoko27.ru/feedback/api/"
 
 //    const val IMAGE_URL = "http://10.0.0.74/feedback/resources/"
 //    private const val BASE_URL = "http://10.0.0.74/feedback/api/"
@@ -251,6 +251,7 @@ object RcokoClient {
                 override fun onResponse(call: Call<GetEventResponse>, response: Response<GetEventResponse>) {
                     try {
                         val res = response.body()!!
+                        //показываем все что пришло
                         when {
                             res.result=="empty" ->{}
                             res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
@@ -484,6 +485,31 @@ object RcokoClient {
                     verifyError(t)
                 }
 
+            }
+        )
+    }
+
+    fun editMessage(request: EditMessageRequest, token:String){
+        service.editMessage(token, request).enqueue(
+            object : Callback<EditMessageResponse> {
+
+                override fun onResponse(call: Call<EditMessageResponse>, response: Response<EditMessageResponse>) {
+                    try{
+                        val res = response.body()!!
+                        when {
+                            res.result=="empty" ->{}
+                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
+                            res.result=="error" -> baseError(res)
+                            else -> unknownError()
+                        }
+                    }catch (e: NullPointerException){
+                        verifyError(e)
+                    }
+                }
+
+                override fun onFailure(call: Call<EditMessageResponse>, t: Throwable) {
+                    verifyError(t)
+                }
             }
         )
     }

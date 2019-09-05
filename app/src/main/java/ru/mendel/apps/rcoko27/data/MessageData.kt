@@ -37,6 +37,6 @@ class MessageData() {
     var uuid: String? = null
     var state: Int = -1
     var gmt: String? = null
-
+    var verification: Int = 0//ставить ли галочку при выводе
 
 }

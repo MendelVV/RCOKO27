@@ -1,5 +1,6 @@
 package ru.mendel.apps.rcoko27.api
 
+import android.util.Log
 import ru.mendel.apps.rcoko27.api.requests.*
 
 object APIHelper {
@@ -115,5 +116,13 @@ object APIHelper {
         val request = RemoveMessageRequest(uuid = uuid)
         request.appname = appname
         RcokoClient.removeMessage(request, token)
+    }
+
+    fun editMessage(appname:String, token:String, uuid: String, text: String){
+       // Log.d("MyTag","editMessage")
+        val request = EditMessageRequest(uuid = uuid,
+            text = text)
+        request.appname = appname
+        RcokoClient.editMessage(request, token)
     }
 }

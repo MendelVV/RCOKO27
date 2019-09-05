@@ -6,6 +6,7 @@
     <color name="colorAccent">#0093dd</color>
     <color name="colorAccentLight">#01A2F3</color>
     <color name="colorExternalMessage">#9CD8F7</color>
+    <color name="colorExternalLightVerification">#FC8281</color>
     <color name="colorRecipient">#303F9F</color>
 
 
