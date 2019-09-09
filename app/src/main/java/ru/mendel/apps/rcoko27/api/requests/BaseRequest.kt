@@ -21,6 +21,7 @@ open class BaseRequest(var action: String? =null) {
         const val ACTION_REMOVE_MESSAGE = "remove_message"
         const val ACTION_EDIT_MESSAGE = "edit_message"
         const val ACTION_UPDATE_MESSAGES = "update_messages"
+        const val ACTION_REMOVE_ALIEN_MESSAGE = "remove_alien_message"//удаление чужих сообщений
 
         const val ACTION_VOTE = "vote"
 

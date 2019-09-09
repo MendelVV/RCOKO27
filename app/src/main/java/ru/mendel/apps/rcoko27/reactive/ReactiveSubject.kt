@@ -42,6 +42,12 @@ object ReactiveSubject {
             .subscribe(observer)
     }
 
+    fun addSubscribe(observer: ResponseObserver, filter: ArrayList<String>){
+        responseSubject
+            .filter { x -> x.action in filter}
+            .subscribe(observer)
+    }
+
     fun addSubscribe(observer: Observer<BaseResponse>){
         responseSubject.subscribe(observer)
     }

@@ -163,7 +163,8 @@ class EventMessagesFragment : BaseEventFragment() {
         mObservers.add(observerUpdateMessage)
 
         val observerRemoveMessage = ResponseObserver{x->actionRemoveMessage(x)}
-        ReactiveSubject.addSubscribe(observerRemoveMessage, BaseRequest.ACTION_REMOVE_MESSAGE)
+        ReactiveSubject.addSubscribe(observerRemoveMessage,
+            arrayListOf(BaseRequest.ACTION_REMOVE_MESSAGE, BaseRequest.ACTION_REMOVE_ALIEN_MESSAGE))
         mObservers.add(observerRemoveMessage)
 
         val observerEditMessage = ResponseObserver{x->actionEditMessage(x)}
@@ -277,7 +278,16 @@ class EventMessagesFragment : BaseEventFragment() {
                 }else{
                     itemView.view_external_verification.visibility=View.GONE
                 }
-
+                val ver = QueryPreference.getVerification(activity!!)
+                if (ver==1){
+                    //если верифицированный пользователь то он может удалть чужие сообщения
+                    itemView.setOnLongClickListener {
+                        showAlienMenu()
+                        return@setOnLongClickListener true
+                    }
+                }else{
+                    itemView.setOnLongClickListener(null)
+                }
             }
 
         }
@@ -323,12 +333,32 @@ class EventMessagesFragment : BaseEventFragment() {
             ad.show()
         }
 
+        private fun showAlienMenu(){
+            //показываем меню в зависимости от того какой пользователь
+            val ver = QueryPreference.getVerification(activity!!)
+
+            val ad = AlertDialog.Builder(activity!!)
+            ad.setItems(R.array.actions_delete) { d: DialogInterface, n:Int ->
+                when(n){
+                    0->removeAlienMessage()
+                }
+                d.dismiss()}
+            ad.show()
+        }
+
         private fun removeMessage(){
             //собираем сообщение на удаление сообщения
-
             APIHelper.removeMessage(appname = activity!!.packageName,
                 token = QueryPreference.getToken(activity!!)!!,
                 uuid = mMessageData!!.uuid.toString()!!)
+        }
+
+        private fun removeAlienMessage(){
+            //собираем сообщение на удаление сообщения
+            APIHelper.removeAlienMessage(appname = activity!!.packageName,
+                token = QueryPreference.getToken(activity!!)!!,
+                uuid = mMessageData!!.uuid.toString(),
+                login = mMessageData!!.author!!)
         }
 
         private fun editMessage(){

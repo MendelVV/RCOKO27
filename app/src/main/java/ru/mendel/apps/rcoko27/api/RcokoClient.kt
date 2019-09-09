@@ -514,6 +514,32 @@ object RcokoClient {
         )
     }
 
+    fun removeAlienMessage(request: RemoveAlienMessageRequest, token:String){
+        service.removeAlienMessage(token, request).enqueue(
+            object : Callback<RemoveMessageResponse> {
+
+                override fun onResponse(call: Call<RemoveMessageResponse>, response: Response<RemoveMessageResponse>) {
+                    try{
+                        val res = response.body()!!
+                        when {
+                            res.result=="empty" ->{}
+                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
+                            res.result=="error" -> baseError(res)
+                            else -> unknownError()
+                        }
+                    }catch (e: NullPointerException){
+                        verifyError(e)
+                    }
+                }
+
+                override fun onFailure(call: Call<RemoveMessageResponse>, t: Throwable) {
+                    verifyError(t)
+                }
+
+            }
+        )
+    }
+
     private fun baseError(response: BaseResponse){
         System.err.println("error type=${response.type}")
         val action = ActionData(ActionData.ACTION_ERROR)
