@@ -29,26 +29,9 @@ class EventData() {
     var type : String? = null
     var icon : String? = null
     var state : Int = -1
+    var level : Int = -1
     var votingcount: Int = 0
     var messagescount: Int = 0
-
-    constructor(jsonObject: JSONObject) : this() {
-        try {
-            code = jsonObject.getInt("code")
-            title = jsonObject.getString("title")
-            text = jsonObject.getString("text")
-            dateevent = jsonObject.getString("date_event")
-            datenews = jsonObject.getString("date_news")
-            type = jsonObject.getString("type")
-            icon = jsonObject.getString("icon")
-            state = jsonObject.getInt("state")
-            votingcount = jsonObject.getInt("voting_count")
-            messagescount = jsonObject.getInt("messages_count")
-        }catch (e:JSONException){
-            Log.e("MyTag",e.toString())
-        }
-
-    }
 
     fun getImageUrl(): String?{
         if (icon!="false"){

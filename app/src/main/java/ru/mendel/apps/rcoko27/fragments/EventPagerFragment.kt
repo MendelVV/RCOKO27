@@ -123,8 +123,9 @@ class EventPagerFragment : BaseEventFragment() {
         override fun getItem(pos: Int): Fragment {
             if (mEvent!=null){
                 return when (pos){
-                    0-> EventMessagesFragment.newInstance(mEventCode)
-                    1-> EventVotingFragment.newInstance(mEventCode)
+                    0-> EventMainFragment.newInstance(mEventCode)
+                    1-> EventMessagesFragment.newInstance(mEventCode)
+                    2-> EventVotingFragment.newInstance(mEventCode)
                     else -> Fragment()
                 }
             }else{
@@ -133,14 +134,15 @@ class EventPagerFragment : BaseEventFragment() {
         }
 
         override fun getCount(): Int {
-            return 2
+            return 3
         }
 
         override fun getPageTitle(pos: Int): CharSequence? {
-            when (pos){
-                0->return getString(R.string.messages)
-                1->return getString(R.string.voting)
-                else -> return ""
+            return when (pos){
+                0-> getString(R.string.event)
+                1-> getString(R.string.discussion)
+                2-> getString(R.string.voting)
+                else -> ""
             }
         }
 

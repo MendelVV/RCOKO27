@@ -63,7 +63,7 @@ class EventMessagesFragment : BaseEventFragment() {
             messageData.gmt = response.gmt
             RcokoDatabase(activity!!)
             RcokoDatabase.updateMessage(messageData)
-            val n = mMessages.indexOf(messageData)+1
+            val n = mMessages.indexOf(messageData)
             Log.d("MyTag","update item $n")
             mUiHandler.post { mAdapter!!.notifyItemChanged(n) }
         }else{
@@ -77,7 +77,7 @@ class EventMessagesFragment : BaseEventFragment() {
         val messageData = findMessage(response.uuid!!)
         val pos = mMessages.indexOf(messageData)
         mMessages.removeAt(pos)
-        mUiHandler.post { mAdapter!!.notifyItemRemoved(pos+1) }
+        mUiHandler.post { mAdapter!!.notifyItemRemoved(pos) }
     }
 
     private fun actionEditMessage(message: BaseResponse){
@@ -86,7 +86,7 @@ class EventMessagesFragment : BaseEventFragment() {
         val pos = mMessages.indexOf(messageData)
         messageData!!.text=response.text
         Log.d("MyTag","update pos=$pos text=${response.text}")
-        mUiHandler.post { mAdapter!!.notifyItemChanged(pos+1) }
+        mUiHandler.post { mAdapter!!.notifyItemChanged(pos) }
     }
 
     private fun actionUpdateMessage(message: BaseResponse){
@@ -227,8 +227,8 @@ class EventMessagesFragment : BaseEventFragment() {
             messageData.date = "none"
 
             mMessages.add(messageData)
-            mAdapter!!.notifyItemInserted(mMessages.size)
-            view!!.recycler_view.scrollToPosition(mMessages.size)
+            mAdapter!!.notifyItemInserted(mMessages.size-1)
+            view!!.recycler_view.scrollToPosition(mMessages.size-1)
 
             RcokoDatabase(activity!!)
             RcokoDatabase.insertMessage(messageData)
@@ -290,23 +290,6 @@ class EventMessagesFragment : BaseEventFragment() {
                 }
             }
 
-        }
-
-        fun bindEvent(event: EventData){
-            itemView.event_type.text = event.type+" ("+EventData.convertDate(event.dateevent!!)+")"
-            itemView.event_title.text = event.title
-            itemView.event_text.text = event.text
-            itemView.event_news_date.text = EventData.convertDate(event.datenews!!)
-
-            val nm = event.getImageUrl()
-            if (nm!=null){
-                Picasso.get()
-                    .load(nm)
-                    .resize(300,300)
-                    .centerCrop()
-                    .error(R.drawable.rcoko27)
-                    .into(itemView.event_image)
-            }
         }
 
         private fun showMenu(){
@@ -376,38 +359,26 @@ class EventMessagesFragment : BaseEventFragment() {
             val inflater = LayoutInflater.from(activity)
 
             val view = when (type){
-                0->inflater.inflate(R.layout.event_on_message_item, viewGroup, false)
-                1->inflater.inflate(R.layout.message_item, viewGroup, false)
+                0->inflater.inflate(R.layout.message_item, viewGroup, false)
                 else->inflater.inflate(R.layout.message_external_item, viewGroup, false)
             }
             return  MessageHolder(view)
         }
 
         override fun getItemCount(): Int {
-            if (mEvent!=null){
-                return mMessages.size+1
-            }else{
-                return mMessages.size
-            }
+            return mMessages.size
         }
 
         override fun onBindViewHolder(holder: MessageHolder, pos: Int) {
-            if (pos==0){
-                holder.bindEvent(mEvent!!)
-            }else{
-                holder.bindMessage(mMessages[pos-1])
-            }
+            holder.bindMessage(mMessages[pos])
         }
 
         override fun getItemViewType(position: Int): Int {
-            return when (position){
-                0-> 0
-                else -> return if (mMessages[position-1].author==mLogin){
-                    1
+            return if (mMessages[position].author==mLogin){
+                    0
                 }else{
-                    2
+                    1
                 }
-            }
         }
     }
 

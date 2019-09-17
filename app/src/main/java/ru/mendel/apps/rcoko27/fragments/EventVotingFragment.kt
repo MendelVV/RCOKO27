@@ -85,7 +85,9 @@ class EventVotingFragment : BaseEventFragment(){
         mAdapter = VotingAdapter()
         view.recycler_view.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         view.recycler_view.adapter = mAdapter
-
+        if (mVoting.size==0){
+            view.text_none_voting.visibility = View.VISIBLE
+        }
         return view
     }
 
