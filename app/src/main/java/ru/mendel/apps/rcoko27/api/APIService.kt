@@ -53,6 +53,9 @@ interface APIService {
     @POST("get_data.php")
     fun editSettings(@Header("token") token:String, @Body req: EditSettingsRequest): Call<EditSettingsResponse>
 
+    @POST("get_data.php")
+    fun getInformation(@Header("token") token:String, @Body req: GetInformationRequest): Call<GetInformationResponse>
+
     @POST("activities.php")
     fun getActivities(@Header("token") token:String, @Body req: ActivitiesRequest): Call<ActivitiesResponse>
 

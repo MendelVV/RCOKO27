@@ -2,7 +2,6 @@ package ru.mendel.apps.rcoko27.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -136,7 +135,7 @@ class ActivitiesFragment : BaseEventFragment() {
             mCurrentData = event
             itemView.message_event.text = event.title
             itemView.message_info.text = getString(R.string.message_info,resources.getQuantityString(R.plurals.pl_messages,mActivitiesData!!.number,mActivitiesData!!.number))
-            itemView.message_date.text = MessageData.convertData(mActivitiesData!!.date!!,mGmt!!)
+            itemView.message_date.text = MessageData.convertDate(mActivitiesData!!.date!!,mGmt!!)
             itemView.message_event_type.text = event.type+" ("+EventData.convertDate(event.dateevent!!)+")"
         }
 
@@ -147,7 +146,7 @@ class ActivitiesFragment : BaseEventFragment() {
             itemView.vote_question.text = vote.text
             itemView.voting_recycler.setAnswers(vote.answers)
             itemView.button_open_event.setOnClickListener{openEvent()}
-            itemView.vote_date.text = MessageData.convertData(mActivitiesData!!.date!!,mGmt!!)
+            itemView.vote_date.text = MessageData.convertDate(mActivitiesData!!.date!!,mGmt!!)
         }
 
         fun bindSettings(){

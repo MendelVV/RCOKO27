@@ -13,6 +13,7 @@
     <dimen name="text22">22sp</dimen>
     <dimen name="radius">12dp</dimen>
     <dimen name="indent">48dp</dimen>
+    <dimen name="indent_information">36dp</dimen>
     <dimen name="setting_img_size">32dp</dimen>
 
     <dimen name="send_img_size">40dp</dimen>

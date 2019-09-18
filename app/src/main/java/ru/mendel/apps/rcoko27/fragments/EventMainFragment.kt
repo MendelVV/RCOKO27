@@ -12,10 +12,18 @@ import android.widget.LinearLayout
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.event_messages_fragment.view.*
 import kotlinx.android.synthetic.main.event_on_message_item.view.*
+import kotlinx.android.synthetic.main.information_item.view.*
 import ru.mendel.apps.rcoko27.*
+import ru.mendel.apps.rcoko27.api.APIHelper
+import ru.mendel.apps.rcoko27.api.requests.BaseRequest
+import ru.mendel.apps.rcoko27.api.responses.BaseResponse
+import ru.mendel.apps.rcoko27.api.responses.GetInformationResponse
 import ru.mendel.apps.rcoko27.data.EventData
+import ru.mendel.apps.rcoko27.data.InformationData
 import ru.mendel.apps.rcoko27.data.MessageData
 import ru.mendel.apps.rcoko27.database.RcokoDatabase
+import ru.mendel.apps.rcoko27.reactive.ReactiveSubject
+import ru.mendel.apps.rcoko27.reactive.ResponseObserver
 
 class EventMainFragment : BaseEventFragment() {
 
@@ -35,6 +43,14 @@ class EventMainFragment : BaseEventFragment() {
     private var mAdapter : MessageAdapter? = null
     private var mToken: String? = null
     private var mLogin: String? = null
+    private var mInformation = arrayListOf<InformationData>()
+
+    private fun actionGetInformation(message: BaseResponse){
+        val response = message as GetInformationResponse
+        mInformation.clear()
+        mInformation.addAll(response.information)
+        mUiHandler.post{mAdapter!!.notifyDataSetChanged()}
+    }
 
     override fun onStart() {
         super.onStart()
@@ -47,7 +63,8 @@ class EventMainFragment : BaseEventFragment() {
     }
 
     override fun subscribe() {
-
+        val observerGetInformation = ResponseObserver{x -> actionGetInformation(x)}
+        ReactiveSubject.addSubscribe(observerGetInformation, BaseRequest.ACTION_GET_INFORMATION)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +76,8 @@ class EventMainFragment : BaseEventFragment() {
         mToken = QueryPreference.getToken(activity!!)
         mLogin = QueryPreference.getLogin(activity!!)
 
+        //запускаем поиск объявлений
+        getInformation()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -76,7 +95,15 @@ class EventMainFragment : BaseEventFragment() {
         return view
     }
 
+    private fun getInformation(){
+        APIHelper.getInformation(appname = activity!!.packageName,
+            token = QueryPreference.getToken(activity!!)!!,
+            event = mEvent!!.code)
+    }
+
     inner class EventHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+
+        private var mInfo: InformationData? = null
 
         fun bindEvent(event: EventData){
             itemView.event_type.text = event.type+" ("+EventData.convertDate(event.dateevent!!)+")"
@@ -95,6 +122,12 @@ class EventMainFragment : BaseEventFragment() {
             }
         }
 
+        fun bindInformation(info: InformationData){
+            mInfo = info
+            itemView.text_information.text = mInfo!!.text
+            itemView.text_information_time.text = MessageData.convertDate(mInfo!!.date!!, mInfo!!.gmt!!)
+        }
+
     }
 
     inner class MessageAdapter : RecyclerView.Adapter<EventHolder>(){
@@ -104,23 +137,31 @@ class EventMainFragment : BaseEventFragment() {
 
             val view = when (type){
                 0->inflater.inflate(R.layout.event_on_message_item, viewGroup, false)
+                1->inflater.inflate(R.layout.information_item, viewGroup, false)
                 else->View(activity!!)
             }
             return  EventHolder(view)
         }
 
         override fun getItemCount(): Int {
-            return 1//пока только само событие
+            return mInformation.size+1//пока только само событие
         }
 
         override fun onBindViewHolder(holder: EventHolder, pos: Int) {
             if (pos==0){
                 holder.bindEvent(mEvent!!)
+            }else{
+                holder.bindInformation(mInformation[pos-1])
             }
         }
 
         override fun getItemViewType(position: Int): Int {
-            return 0
+            return if (position==0){
+                0
+            }else{
+                1
+            }
+
         }
     }
 

@@ -131,4 +131,10 @@ object APIHelper {
         request.appname = appname
         RcokoClient.removeAlienMessage(request, token)
     }
+
+    fun getInformation(appname:String, token:String, event: Int){
+        val request = GetInformationRequest(event = event)
+        request.appname = appname
+        RcokoClient.getInformation(request, token)
+    }
 }

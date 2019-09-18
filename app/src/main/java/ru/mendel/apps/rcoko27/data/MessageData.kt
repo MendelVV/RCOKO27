@@ -14,7 +14,7 @@ class MessageData() {
         const val STATE_SEND = 0
         const val STATE_DELIVERED = 1
 
-        fun convertData(date: String, gmt:String):String{
+        fun convertDate(date: String, gmt:String):String{
             //пришли данные в виде 2019-12-10 10:10:10, +02:00
             val calendar = GregorianCalendar()
             val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z")
