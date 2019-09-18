@@ -67,4 +67,7 @@ interface APIService {
 
     @POST("edit_data.php")
     fun removeAlienMessage(@Header("token") token:String, @Body req: RemoveAlienMessageRequest): Call<RemoveMessageResponse>
+
+    @POST("send_message.php")
+    fun sendInformation(@Header("token") token:String, @Body req: SendInformationRequest): Call<SendInformationResponse>
 }

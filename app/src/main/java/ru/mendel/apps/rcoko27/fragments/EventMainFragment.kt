@@ -18,6 +18,8 @@ import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.api.requests.BaseRequest
 import ru.mendel.apps.rcoko27.api.responses.BaseResponse
 import ru.mendel.apps.rcoko27.api.responses.GetInformationResponse
+import ru.mendel.apps.rcoko27.api.responses.SendInformationResponse
+import ru.mendel.apps.rcoko27.data.DataValidator
 import ru.mendel.apps.rcoko27.data.EventData
 import ru.mendel.apps.rcoko27.data.InformationData
 import ru.mendel.apps.rcoko27.data.MessageData
@@ -52,6 +54,18 @@ class EventMainFragment : BaseEventFragment() {
         mUiHandler.post{mAdapter!!.notifyDataSetChanged()}
     }
 
+    private fun actionSendInformation(message: BaseResponse){
+        val response = message as SendInformationResponse
+        val information = InformationData()
+        information.code = response.code
+        information.event = mEvent!!.code
+        information.text = response.text
+        information.date = response.date
+        information.gmt = response.gmt
+        mInformation.add(information)
+        mUiHandler.post { mAdapter!!.notifyItemInserted(mInformation.size-1) }
+    }
+
     override fun onStart() {
         super.onStart()
         subscribe()
@@ -65,6 +79,11 @@ class EventMainFragment : BaseEventFragment() {
     override fun subscribe() {
         val observerGetInformation = ResponseObserver{x -> actionGetInformation(x)}
         ReactiveSubject.addSubscribe(observerGetInformation, BaseRequest.ACTION_GET_INFORMATION)
+        mObservers.add(observerGetInformation)
+
+        val observerSendInformation = ResponseObserver{x -> actionSendInformation(x)}
+        ReactiveSubject.addSubscribe(observerSendInformation, BaseRequest.ACTION_SEND_INFORMATION)
+        mObservers.add(observerSendInformation)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,13 +103,17 @@ class EventMainFragment : BaseEventFragment() {
         val view = inflater.inflate(R.layout.event_messages_fragment,container,false)
 
         mAdapter = MessageAdapter()
-//        view.recycler_view.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         view.recycler_view.layoutManager = WrapContentLinearLayoutManager(activity!!, LinearLayoutManager.VERTICAL, false)
         view.recycler_view.adapter = mAdapter
         view.recycler_view.scrollToPosition(mAdapter!!.itemCount-1)
 
         val layout = view.findViewById<LinearLayout>(R.id.bottom_layout)
-        layout.visibility = View.GONE
+        if (QueryPreference.getVerification(activity!!)==1){
+            layout.visibility = View.VISIBLE
+            view.send_button.setOnClickListener { sendInformation() }
+        }else{
+            layout.visibility = View.GONE
+        }
 
         return view
     }
@@ -99,6 +122,19 @@ class EventMainFragment : BaseEventFragment() {
         APIHelper.getInformation(appname = activity!!.packageName,
             token = QueryPreference.getToken(activity!!)!!,
             event = mEvent!!.code)
+    }
+
+    private fun sendInformation(){
+        val text = view!!.message_text.text.toString()
+        if (DataValidator.isTrivialString(text)){
+            //если это тривиальная строка, то ничего не делаем
+            return
+        }
+        view!!.message_text.setText("")
+        APIHelper.sendInformation(appname = activity!!.packageName,
+            token = QueryPreference.getToken(activity!!)!!,
+            event = mEvent!!.code,
+            text = text)
     }
 
     inner class EventHolder(itemView: View) : RecyclerView.ViewHolder(itemView){

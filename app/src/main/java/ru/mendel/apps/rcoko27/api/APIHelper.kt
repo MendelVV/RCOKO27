@@ -137,4 +137,11 @@ object APIHelper {
         request.appname = appname
         RcokoClient.getInformation(request, token)
     }
+
+    fun sendInformation(appname:String, token:String, event:Int, text:String){
+        val request = SendInformationRequest(event = event,
+            text = text)
+        request.appname = appname
+        RcokoClient.sendInformation(request, token)
+    }
 }

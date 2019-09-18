@@ -221,12 +221,9 @@ object RcokoClient {
                         val res = response.body()!!
                         when {
                             res.result=="empty" ->{}
-                            res.result=="ok" -> //                        Log.d("MyTag","ok "+res.data.size)
-                                ReactiveSubject.next(res)//отправили ответ
-                            res.result=="error" -> //                        Log.d("MyTag","getData error")
-                                baseError(res)
-                            else -> //                        Log.d("MyTag","getData unknowError")
-                                unknownError()
+                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
+                            res.result=="error" -> baseError(res)
+                            else -> unknownError()
                         }
                     }catch (e: NullPointerException){
                         verifyError(e)
@@ -559,6 +556,32 @@ object RcokoClient {
                 }
 
                 override fun onFailure(call: Call<GetInformationResponse>, t: Throwable) {
+                    verifyError(t)
+                }
+
+            }
+        )
+    }
+
+    fun sendInformation(request: SendInformationRequest, token:String){
+        service.sendInformation(token, request).enqueue(
+            object : Callback<SendInformationResponse> {
+
+                override fun onResponse(call: Call<SendInformationResponse>, response: Response<SendInformationResponse>) {
+                    try{
+                        val res = response.body()!!
+                        when {
+                            res.result=="empty" ->{}
+                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
+                            res.result=="error" -> baseError(res)
+                            else -> unknownError()
+                        }
+                    }catch (e: NullPointerException){
+                        verifyError(e)
+                    }
+                }
+
+                override fun onFailure(call: Call<SendInformationResponse>, t: Throwable) {
                     verifyError(t)
                 }
 
