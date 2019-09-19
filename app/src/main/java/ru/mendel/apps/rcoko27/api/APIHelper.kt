@@ -144,4 +144,16 @@ object APIHelper {
         request.appname = appname
         RcokoClient.sendInformation(request, token)
     }
+
+    fun removeInformation(appname:String, token:String, code:Int){
+        val request = RemoveInformationRequest(code = code)
+        request.appname = appname
+        RcokoClient.removeInformation(request, token)
+    }
+
+    fun editInformation(appname:String, token:String, code:Int, text: String){
+        val request = EditInformationRequest(code = code, text = text)
+        request.appname = appname
+        RcokoClient.editInformation(request, token)
+    }
 }

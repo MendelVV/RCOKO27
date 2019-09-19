@@ -1,7 +1,9 @@
 package ru.mendel.apps.rcoko27.fragments
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.*
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -16,14 +18,13 @@ import kotlinx.android.synthetic.main.information_item.view.*
 import ru.mendel.apps.rcoko27.*
 import ru.mendel.apps.rcoko27.api.APIHelper
 import ru.mendel.apps.rcoko27.api.requests.BaseRequest
-import ru.mendel.apps.rcoko27.api.responses.BaseResponse
-import ru.mendel.apps.rcoko27.api.responses.GetInformationResponse
-import ru.mendel.apps.rcoko27.api.responses.SendInformationResponse
+import ru.mendel.apps.rcoko27.api.responses.*
 import ru.mendel.apps.rcoko27.data.DataValidator
 import ru.mendel.apps.rcoko27.data.EventData
 import ru.mendel.apps.rcoko27.data.InformationData
 import ru.mendel.apps.rcoko27.data.MessageData
 import ru.mendel.apps.rcoko27.database.RcokoDatabase
+import ru.mendel.apps.rcoko27.dialogs.EditInformationDialog
 import ru.mendel.apps.rcoko27.reactive.ReactiveSubject
 import ru.mendel.apps.rcoko27.reactive.ResponseObserver
 
@@ -63,7 +64,26 @@ class EventMainFragment : BaseEventFragment() {
         information.date = response.date
         information.gmt = response.gmt
         mInformation.add(information)
-        mUiHandler.post { mAdapter!!.notifyItemInserted(mInformation.size-1) }
+        mUiHandler.post { mAdapter!!.notifyItemInserted(mInformation.size) }
+    }
+
+    private fun actionRemoveInformation(message: BaseResponse){
+        val response = message as RemoveInformationResponse
+        val information = InformationData()
+        information.code = response.code
+        val pos = mInformation.indexOf(information)
+        mInformation.removeAt(pos)
+        mUiHandler.post { mAdapter!!.notifyItemRemoved(pos+1) }
+    }
+
+    private fun actionEditInformation(message: BaseResponse){
+        val response = message as EditInformationResponse
+        val information = InformationData()
+        information.code = response.code
+        val pos = mInformation.indexOf(information)
+        mInformation[pos].text = response.text
+        mUiHandler.post { mAdapter!!.notifyItemChanged(pos+1) }
+
     }
 
     override fun onStart() {
@@ -84,6 +104,14 @@ class EventMainFragment : BaseEventFragment() {
         val observerSendInformation = ResponseObserver{x -> actionSendInformation(x)}
         ReactiveSubject.addSubscribe(observerSendInformation, BaseRequest.ACTION_SEND_INFORMATION)
         mObservers.add(observerSendInformation)
+
+        val observerRemoveInformation = ResponseObserver{ x -> actionRemoveInformation(x)}
+        ReactiveSubject.addSubscribe(observerRemoveInformation, BaseRequest.ACTION_REMOVE_INFORMATION)
+        mObservers.add(observerRemoveInformation)
+
+        val observerEditInformation = ResponseObserver{x -> actionEditInformation(x)}
+        ReactiveSubject.addSubscribe(observerEditInformation, BaseRequest.ACTION_EDIT_INFORMATION)
+        mObservers.add(observerEditInformation)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -162,6 +190,38 @@ class EventMainFragment : BaseEventFragment() {
             mInfo = info
             itemView.text_information.text = mInfo!!.text
             itemView.text_information_time.text = MessageData.convertDate(mInfo!!.date!!, mInfo!!.gmt!!)
+
+            itemView.setOnLongClickListener {
+                showMenu()
+                return@setOnLongClickListener true
+            }
+        }
+
+        private fun showMenu(){
+            val ver = QueryPreference.getVerification(activity!!)
+            if (ver==0) return
+            val ad = AlertDialog.Builder(activity!!)
+            ad.setItems(R.array.actions_delete_edit) { d: DialogInterface, n:Int ->
+                when(n){
+                    0->editInformation()
+                    1->removeInformation()
+                }
+
+                d.dismiss()}
+            ad.show()
+        }
+
+        private fun editInformation(){
+            //открываем диалог изменения объявления
+            val dialog = EditInformationDialog.newInstance(mInfo!!.code, mInfo!!.text!!)
+            dialog.show(fragmentManager,"edit information")
+        }
+
+        private fun removeInformation(){
+            //удяляем объявление
+            APIHelper.removeInformation(appname = activity!!.packageName,
+                token = QueryPreference.getToken(activity!!)!!,
+                code = mInfo!!.code)
         }
 
     }

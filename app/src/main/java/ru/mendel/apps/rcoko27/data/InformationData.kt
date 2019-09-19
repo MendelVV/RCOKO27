@@ -8,4 +8,11 @@ class InformationData {
     var text: String? = null
     var gmt: String? = null
 
+
+    override fun equals(other: Any?): Boolean {
+        if (other is InformationData){
+            return code == other.code
+        }
+        return false
+    }
 }

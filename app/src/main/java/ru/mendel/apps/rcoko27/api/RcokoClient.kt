@@ -16,11 +16,11 @@ import java.net.SocketTimeoutException
 
 object RcokoClient {
     //класс отправляющий запросы на сервер и получающий ответы
-    const val IMAGE_URL = "http://192.168.43.14/feedback/resources/"
-    private const val BASE_URL = "http://192.168.43.14/feedback/api/"
+//    const val IMAGE_URL = "http://192.168.43.14/feedback/resources/"
+//    private const val BASE_URL = "http://192.168.43.14/feedback/api/"
 
-//    const val IMAGE_URL = "https://feedback.rcoko27.ru/feedback/resources/"
-//    private const val BASE_URL = "https://feedback.rcoko27.ru/feedback/api/"
+    const val IMAGE_URL = "https://feedback.rcoko27.ru/feedback/resources/"
+    private const val BASE_URL = "https://feedback.rcoko27.ru/feedback/api/"
 
 //    const val IMAGE_URL = "http://10.0.0.74/feedback/resources/"
 //    private const val BASE_URL = "http://10.0.0.74/feedback/api/"
@@ -218,21 +218,13 @@ object RcokoClient {
 
                 override fun onResponse(call: Call<GetDataResponse>, response: Response<GetDataResponse>) {
                     try {
-                        val res = response.body()!!
-                        when {
-                            res.result=="empty" ->{}
-                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
-                            res.result=="error" -> baseError(res)
-                            else -> unknownError()
-                        }
+                        responseProcessing(response.body()!!)
                     }catch (e: NullPointerException){
                         verifyError(e)
                     }
-
                 }
 
                 override fun onFailure(call: Call<GetDataResponse>, t: Throwable) {
-//                    Log.i("MyTag","getData")
                     verifyError(t)
                 }
 
@@ -247,18 +239,10 @@ object RcokoClient {
 
                 override fun onResponse(call: Call<GetEventResponse>, response: Response<GetEventResponse>) {
                     try {
-                        val res = response.body()!!
-                        //показываем все что пришло
-                        when {
-                            res.result=="empty" ->{}
-                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
-                            res.result=="error" -> baseError(res)
-                            else -> unknownError()
-                        }
+                        responseProcessing(response.body()!!)
                     }catch (e: NullPointerException){
                         verifyError(e)
                     }
-
                 }
 
                 override fun onFailure(call: Call<GetEventResponse>, t: Throwable) {
@@ -277,17 +261,10 @@ object RcokoClient {
 
                 override fun onResponse(call: Call<SendMessageResponse>, response: Response<SendMessageResponse>) {
                     try {
-                        val res = response.body()!!
-                        when {
-                            res.result=="empty" ->{}
-                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
-                            res.result=="error" -> baseError(res)
-                            else -> unknownError()
-                        }
+                        responseProcessing(response.body()!!)
                     }catch (e: NullPointerException){
                         verifyError(e)
                     }
-
                 }
 
                 override fun onFailure(call: Call<SendMessageResponse>, t: Throwable) {
@@ -305,14 +282,8 @@ object RcokoClient {
             object : Callback<VoteResponse> {
 
                 override fun onResponse(call: Call<VoteResponse>, response: Response<VoteResponse>) {
-                    try{
-                        val res = response.body()!!
-                        when {
-                            res.result=="empty" ->{}
-                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
-                            res.result=="error" -> baseError(res)
-                            else -> unknownError()
-                        }
+                    try {
+                        responseProcessing(response.body()!!)
                     }catch (e: NullPointerException){
                         verifyError(e)
                     }
@@ -333,14 +304,8 @@ object RcokoClient {
             object : Callback<ActivitiesResponse> {
 
                 override fun onResponse(call: Call<ActivitiesResponse>, response: Response<ActivitiesResponse>) {
-                    try{
-                        val res = response.body()!!
-                        when {
-                            res.result=="empty" ->{}
-                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
-                            res.result=="error" -> baseError(res)
-                            else -> unknownError()
-                        }
+                    try {
+                        responseProcessing(response.body()!!)
                     }catch (e: NullPointerException){
                         verifyError(e)
                     }
@@ -360,14 +325,8 @@ object RcokoClient {
             object : Callback<UpdateEventsResponse> {
 
                 override fun onResponse(call: Call<UpdateEventsResponse>, response: Response<UpdateEventsResponse>) {
-                    try{
-                        val res = response.body()!!
-                        when {
-                            res.result=="empty" ->{}
-                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
-                            res.result=="error" -> baseError(res)
-                            else -> unknownError()
-                        }
+                    try {
+                        responseProcessing(response.body()!!)
                     }catch (e: NullPointerException){
                         verifyError(e)
                     }
@@ -386,18 +345,11 @@ object RcokoClient {
             object : Callback<UpdateMessagesResponse> {
 
                 override fun onResponse(call: Call<UpdateMessagesResponse>, response: Response<UpdateMessagesResponse>) {
-                    try{
-                        val res = response.body()!!
-                        when {
-                            res.result=="empty" ->{}
-                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
-                            res.result=="error" -> baseError(res)
-                            else -> unknownError()
-                        }
+                    try {
+                        responseProcessing(response.body()!!)
                     }catch (e: NullPointerException){
                         verifyError(e)
                     }
-
                 }
 
                 override fun onFailure(call: Call<UpdateMessagesResponse>, t: Throwable) {
@@ -413,14 +365,8 @@ object RcokoClient {
             object : Callback<GetSettingsResponse> {
 
                 override fun onResponse(call: Call<GetSettingsResponse>, response: Response<GetSettingsResponse>) {
-                    try{
-                        val res = response.body()!!
-                        when {
-                            res.result=="empty" ->{}
-                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
-                            res.result=="error" -> baseError(res)
-                            else -> unknownError()
-                        }
+                    try {
+                        responseProcessing(response.body()!!)
                     }catch (e: NullPointerException){
                         verifyError(e)
                     }
@@ -439,14 +385,8 @@ object RcokoClient {
             object : Callback<EditSettingsResponse> {
 
                 override fun onResponse(call: Call<EditSettingsResponse>, response: Response<EditSettingsResponse>) {
-                    try{
-                        val res = response.body()!!
-                        when {
-                            res.result=="empty" ->{}
-                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
-                            res.result=="error" -> baseError(res)
-                            else -> unknownError()
-                        }
+                    try {
+                        responseProcessing(response.body()!!)
                     }catch (e: NullPointerException){
                         verifyError(e)
                     }
@@ -465,14 +405,8 @@ object RcokoClient {
             object : Callback<RemoveMessageResponse> {
 
                 override fun onResponse(call: Call<RemoveMessageResponse>, response: Response<RemoveMessageResponse>) {
-                    try{
-                        val res = response.body()!!
-                        when {
-                            res.result=="empty" ->{}
-                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
-                            res.result=="error" -> baseError(res)
-                            else -> unknownError()
-                        }
+                    try {
+                        responseProcessing(response.body()!!)
                     }catch (e: NullPointerException){
                         verifyError(e)
                     }
@@ -491,14 +425,8 @@ object RcokoClient {
             object : Callback<EditMessageResponse> {
 
                 override fun onResponse(call: Call<EditMessageResponse>, response: Response<EditMessageResponse>) {
-                    try{
-                        val res = response.body()!!
-                        when {
-                            res.result=="empty" ->{}
-                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
-                            res.result=="error" -> baseError(res)
-                            else -> unknownError()
-                        }
+                    try {
+                        responseProcessing(response.body()!!)
                     }catch (e: NullPointerException){
                         verifyError(e)
                     }
@@ -516,14 +444,8 @@ object RcokoClient {
             object : Callback<RemoveMessageResponse> {
 
                 override fun onResponse(call: Call<RemoveMessageResponse>, response: Response<RemoveMessageResponse>) {
-                    try{
-                        val res = response.body()!!
-                        when {
-                            res.result=="empty" ->{}
-                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
-                            res.result=="error" -> baseError(res)
-                            else -> unknownError()
-                        }
+                    try {
+                        responseProcessing(response.body()!!)
                     }catch (e: NullPointerException){
                         verifyError(e)
                     }
@@ -542,14 +464,8 @@ object RcokoClient {
             object : Callback<GetInformationResponse> {
 
                 override fun onResponse(call: Call<GetInformationResponse>, response: Response<GetInformationResponse>) {
-                    try{
-                        val res = response.body()!!
-                        when {
-                            res.result=="empty" ->{}
-                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
-                            res.result=="error" -> baseError(res)
-                            else -> unknownError()
-                        }
+                    try {
+                        responseProcessing(response.body()!!)
                     }catch (e: NullPointerException){
                         verifyError(e)
                     }
@@ -566,16 +482,9 @@ object RcokoClient {
     fun sendInformation(request: SendInformationRequest, token:String){
         service.sendInformation(token, request).enqueue(
             object : Callback<SendInformationResponse> {
-
                 override fun onResponse(call: Call<SendInformationResponse>, response: Response<SendInformationResponse>) {
-                    try{
-                        val res = response.body()!!
-                        when {
-                            res.result=="empty" ->{}
-                            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
-                            res.result=="error" -> baseError(res)
-                            else -> unknownError()
-                        }
+                    try {
+                        responseProcessing(response.body()!!)
                     }catch (e: NullPointerException){
                         verifyError(e)
                     }
@@ -587,6 +496,53 @@ object RcokoClient {
 
             }
         )
+    }
+
+    fun removeInformation(request: RemoveInformationRequest, token:String){
+        service.removeInformation(token, request).enqueue(
+            object : Callback<RemoveInformationResponse> {
+                override fun onResponse(call: Call<RemoveInformationResponse>, response: Response<RemoveInformationResponse>) {
+                    try {
+                        responseProcessing(response.body()!!)
+                    }catch (e: NullPointerException){
+                        verifyError(e)
+                    }
+                }
+
+                override fun onFailure(call: Call<RemoveInformationResponse>, t: Throwable) {
+                    verifyError(t)
+                }
+
+            }
+        )
+    }
+
+    fun editInformation(request: EditInformationRequest, token:String){
+        service.editInformation(token, request).enqueue(
+            object : Callback<EditInformationResponse> {
+                override fun onResponse(call: Call<EditInformationResponse>, response: Response<EditInformationResponse>) {
+                    try {
+                        responseProcessing(response.body()!!)
+                    }catch (e: NullPointerException){
+                        verifyError(e)
+                    }
+                }
+
+                override fun onFailure(call: Call<EditInformationResponse>, t: Throwable) {
+                    verifyError(t)
+                }
+
+            }
+        )
+    }
+
+    private fun responseProcessing(res: BaseResponse){
+        when {
+            res.result=="empty" ->{}
+            res.result=="ok" -> ReactiveSubject.next(res)//отправили ответ
+            res.result=="error" -> baseError(res)
+            else -> unknownError()
+        }
     }
 
     private fun baseError(response: BaseResponse){

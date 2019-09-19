@@ -194,7 +194,6 @@ class EventMessagesFragment : BaseEventFragment() {
         view.recycler_view.adapter = mAdapter
         view.recycler_view.scrollToPosition(mAdapter!!.itemCount-1)
 
-
         return view
     }
 
@@ -333,7 +332,7 @@ class EventMessagesFragment : BaseEventFragment() {
             //собираем сообщение на удаление сообщения
             APIHelper.removeMessage(appname = activity!!.packageName,
                 token = QueryPreference.getToken(activity!!)!!,
-                uuid = mMessageData!!.uuid.toString()!!)
+                uuid = mMessageData!!.uuid.toString())
         }
 
         private fun removeAlienMessage(){

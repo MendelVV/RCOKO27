@@ -70,4 +70,11 @@ interface APIService {
 
     @POST("send_message.php")
     fun sendInformation(@Header("token") token:String, @Body req: SendInformationRequest): Call<SendInformationResponse>
+
+    @POST("edit_data.php")
+    fun removeInformation(@Header("token") token:String, @Body req: RemoveInformationRequest): Call<RemoveInformationResponse>
+
+    @POST("edit_data.php")
+    fun editInformation(@Header("token") token:String, @Body req: EditInformationRequest): Call<EditInformationResponse>
+
 }

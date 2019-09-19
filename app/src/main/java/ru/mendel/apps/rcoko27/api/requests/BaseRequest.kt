@@ -31,6 +31,8 @@ open class BaseRequest(var action: String? =null) {
 
         const val ACTION_SEND_INFORMATION = "send_information"
         const val ACTION_GET_INFORMATION = "get_information"
+        const val ACTION_REMOVE_INFORMATION = "remove_information"
+        const val ACTION_EDIT_INFORMATION = "edit_information"
     }
 
     var appname : String? = null
