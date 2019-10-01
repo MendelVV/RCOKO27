@@ -6,12 +6,20 @@ import android.os.*
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.Html
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
 import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import com.squareup.picasso.Picasso
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.event_messages_fragment.view.*
 import kotlinx.android.synthetic.main.event_on_message_item.view.*
 import kotlinx.android.synthetic.main.information_item.view.*
@@ -172,7 +180,12 @@ class EventMainFragment : BaseEventFragment() {
         fun bindEvent(event: EventData){
             itemView.event_type.text = event.type+" ("+EventData.convertDate(event.dateevent!!)+")"
             itemView.event_title.text = event.title
-            itemView.event_text.text = event.text
+
+//            itemView.event_text.text = event.text
+            //если что можно и в фоне ебануть
+
+            setEventText(itemView.event_text, event.text!!)
+
             itemView.event_news_date.text = EventData.convertDate(event.datenews!!)
 
             val nm = event.getImageUrl()
@@ -186,9 +199,50 @@ class EventMainFragment : BaseEventFragment() {
             }
         }
 
+        private fun getText(text:String) : String{
+            var html = text
+            val m = Patterns.WEB_URL.matcher(html)
+            while (m.find()) {
+                val url = m.group()
+                html = text.replace(url,"<a href=\"$url\">$url</a>")
+            }
+            return html
+        }
+
+        private fun setEventText(textView: TextView, text: String){
+
+            Observable.create<String> { subscriber ->
+                try{
+                    //в каком потоке указана подписка в том и запускаем все что тут внутри.
+                    //а уже то что ушло из onNext работет в потоке указанно в observeOn
+                    val res = getText(text)
+                    subscriber.onNext(res)
+                    subscriber.onComplete()
+                }catch (e: Exception){
+                    subscriber.onError(e)
+                }
+            }
+                .subscribeOn(Schedulers.io())//начало подписки
+                .observeOn(AndroidSchedulers.mainThread())//уже когда получили данные
+                .subscribe { html->
+                    val result: Spanned
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        result = Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY)
+                    } else {
+                        result = Html.fromHtml(html)
+                    }
+                    textView.text = result
+                    textView.movementMethod = LinkMovementMethod.getInstance()
+                }
+
+        }
+
         fun bindInformation(info: InformationData){
             mInfo = info
-            itemView.text_information.text = mInfo!!.text
+//            itemView.text_information.text = mInfo!!.text
+
+            setEventText(itemView.text_information, mInfo!!.text!!)
+
             itemView.text_information_time.text = MessageData.convertDate(mInfo!!.date!!, mInfo!!.gmt!!)
 
             itemView.setOnLongClickListener {
