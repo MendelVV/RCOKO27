@@ -10,15 +10,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/padding">
+        <RelativeLayout
+            android:id="@+id/header_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <ImageView
+            <ImageView
                 android:layout_width="@dimen/logo_img_size"
                 android:layout_height="@dimen/logo_img_size"
                 android:id="@+id/event_image"
                 android:src="@drawable/rcoko27"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"/>
-        <TextView
+            <TextView
                 android:id="@+id/event_type"
                 android:textSize="@dimen/text16"
                 android:textColor="@color/colorAccent"
@@ -26,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/event_image"
                 android:layout_marginStart="@dimen/padding"/>
-        <TextView
+            <TextView
                 android:id="@+id/text_title"
                 android:textSize="@dimen/text20"
                 android:textColor="@color/colorText"
@@ -36,12 +40,16 @@
                 android:ellipsize="end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/padding"/>
+                android:layout_marginStart="@dimen/padding"
+                android:layout_marginBottom="@dimen/mini_padding"/>
+
+        </RelativeLayout>
+
         <TextView
                 android:id="@+id/text_info"
                 android:textSize="@dimen/text18"
                 android:textColor="@color/colorTextSecond"
-                android:layout_below="@+id/event_image"
+                android:layout_below="@+id/header_layout"
                 android:maxLines="4"
                 android:textStyle="italic"
                 android:ellipsize="end"

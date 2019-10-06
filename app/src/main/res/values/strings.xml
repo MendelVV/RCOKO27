@@ -39,7 +39,7 @@
     <string name="error_get_data">Обшибка при получении данных</string>
     <string name="my_activities">Мои активности</string>
     <string name="sorry">Извините. Вкладка пока недоступна.</string>
-    <string name="message_info">Вы учавствовали в обсуждении этой новости (отправили %s)</string>
+    <string name="message_info">Вы участвовали в обсуждении этой новости (отправили %s)</string>
     <string name="exit">Выйти</string>
     <string name="view">Просмотр</string>
     <string name="format_error">Ошибка формата ответа</string>
