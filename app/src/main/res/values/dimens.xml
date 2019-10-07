@@ -18,4 +18,5 @@
 
     <dimen name="send_img_size">40dp</dimen>
     <dimen name="message_img_size">20dp</dimen>
+    <dimen name="edit_img_size">30dp</dimen>
 </resources>

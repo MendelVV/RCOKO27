@@ -36,7 +36,7 @@ open class BasicAsync(val url_str: String) : AsyncTask<JSONObject, Void, JSONObj
 
             val reader = BufferedReader(InputStreamReader(connection.inputStream, "UTF-8"))
             val sb = StringBuilder()
-            var line: String? = null
+            var line: String?
             line = reader.readLine()
             while (line!=null) {
                 sb.append(line)

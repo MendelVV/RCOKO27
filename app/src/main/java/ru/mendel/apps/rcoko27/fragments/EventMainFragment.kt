@@ -245,10 +245,18 @@ class EventMainFragment : BaseEventFragment() {
 
             itemView.text_information_time.text = MessageData.convertDate(mInfo!!.date!!, mInfo!!.gmt!!)
 
-            itemView.setOnLongClickListener {
+            val ver = QueryPreference.getVerification(activity!!)
+
+            if (ver!=0){
+                itemView.img_edit.setOnClickListener { showMenu() }
+            }else{
+                itemView.img_edit.visibility = View.GONE
+            }
+
+/*            itemView.setOnLongClickListener {
                 showMenu()
                 return@setOnLongClickListener true
-            }
+            }*/
         }
 
         private fun showMenu(){
