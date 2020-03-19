@@ -35,6 +35,9 @@ interface APIService {
     @POST("get_data.php")
     fun getEvent(@Header("token") token:String, @Body req: GetEventRequest): Call<GetEventResponse>
 
+    @POST("get_data.php")
+    fun getPushData(@Header("token") token:String, @Body req: GetPushDataRequest): Call<GetPushDataResponse>
+
     @POST("send_message.php")
     fun sendMessage(@Header("token") token:String, @Body req: SendMessageRequest): Call<SendMessageResponse>
 

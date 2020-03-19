@@ -536,6 +536,28 @@ object RcokoClient {
         )
     }
 
+    fun getPushData(request: GetPushDataRequest, token: String){
+
+        service.getPushData(token, request).enqueue(
+            object : Callback<GetPushDataResponse> {
+
+                override fun onResponse(call: Call<GetPushDataResponse>, response: Response<GetPushDataResponse>) {
+                    try {
+                        responseProcessing(response.body()!!)
+                    }catch (e: NullPointerException){
+                        verifyError(e)
+                    }
+                }
+
+                override fun onFailure(call: Call<GetPushDataResponse>, t: Throwable) {
+                    Log.i("MyTag","getPushData")
+                    verifyError(t)
+                }
+
+            }
+        )
+    }
+
     private fun responseProcessing(res: BaseResponse){
         when {
             res.result=="empty" ->{}

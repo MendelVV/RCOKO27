@@ -156,4 +156,11 @@ object APIHelper {
         request.appname = appname
         RcokoClient.editInformation(request, token)
     }
+
+    fun getPushData(appname:String, token:String, date:String){
+        val request = GetPushDataRequest(date = date)
+        request.appname = appname
+        RcokoClient.getPushData(request, token)
+    }
+
 }
